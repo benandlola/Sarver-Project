@@ -26,7 +26,7 @@ periodic_reports = search.find_element(By.XPATH, '//label[input[@value="11"]]')
 periodic_reports.click()
 
 #from beginning of year till now
-start = '01/01/2023'
+start = '01/01/2012'
 end = datetime.now().date()
 from_date = search.find_element(By.ID, 'fromDate')
 from_date.send_keys(start)
@@ -40,6 +40,10 @@ wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="filedReports
 columns = ['Stock', 'Transaction Date', 'Buy/Sell', 'Type', 'Amount', 'Senator']
 df = pd.DataFrame(columns=columns)
 
+#TODO fix dates not coming in
+#TODO check num of transations separately to know if going correctly
+#TODO congress trading
+num = 0
 while True:
     #get actual data
     table = driver.find_element(By.ID, 'filedReports')
@@ -53,7 +57,9 @@ while True:
         senator = first_name + ' ' + last_name
         driver.switch_to.window(driver.window_handles[1])
         try: 
-            electronic = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'mb-4')))
+            electronic = WebDriverWait(driver, 7).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'mb-4')))
+            trans = driver.find_element(By.XPATH, '/html/body/div/main/div/div/section/div/ul/li[1]')
+            num += int(trans.text.split(' ')[0][1:])
             rows = driver.find_elements(By.TAG_NAME, "tr")
             for row in rows[1:]:
                 cols = row.find_elements(By.TAG_NAME, "td")
@@ -65,7 +71,7 @@ while True:
                     "Amount": cols[7].text.strip(),
                     "Senator": senator
                 }, ignore_index=True)
-            time.sleep(2)
+            time.sleep(7)
         except:
             pass
         driver.close()
@@ -74,13 +80,10 @@ while True:
     if 'disabled' in next_button.get_attribute('class'):
         break
     next_button.click()
-    time.sleep(2)
+    time.sleep(7)
     wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="filedReports"]/tbody/tr')))
 
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', None)
-print(df)
-time.sleep(5)
+time.sleep(3)
 driver.quit()
-#df.to_csv('data.csv', index=False) 
+print(num)
+df.to_csv('data2.csv', index=False) 
