@@ -40,10 +40,7 @@ wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="filedReports
 columns = ['Stock', 'Transaction Date', 'Buy/Sell', 'Type', 'Amount', 'Senator']
 df = pd.DataFrame(columns=columns)
 
-#TODO fix dates not coming in
-#TODO check num of transations separately to know if going correctly
 #TODO congress trading
-num = 0
 while True:
     #get actual data
     table = driver.find_element(By.ID, 'filedReports')
@@ -59,7 +56,6 @@ while True:
         try: 
             electronic = WebDriverWait(driver, 7).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'mb-4')))
             trans = driver.find_element(By.XPATH, '/html/body/div/main/div/div/section/div/ul/li[1]')
-            num += int(trans.text.split(' ')[0][1:])
             rows = driver.find_elements(By.TAG_NAME, "tr")
             for row in rows[1:]:
                 cols = row.find_elements(By.TAG_NAME, "td")
@@ -85,5 +81,4 @@ while True:
 
 time.sleep(3)
 driver.quit()
-print(num)
-df.to_csv('data2.csv', index=False) 
+df.to_csv('senate_data.csv', index=False) 
