@@ -40,7 +40,6 @@ wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="filedReports
 columns = ['Stock', 'Transaction Date', 'Buy/Sell', 'Type', 'Amount', 'Senator']
 df = pd.DataFrame(columns=columns)
 
-#TODO congress trading
 while True:
     #get actual data
     table = driver.find_element(By.ID, 'filedReports')
