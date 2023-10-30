@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post
@@ -7,7 +6,7 @@ from django.shortcuts import get_object_or_404
 
 class PostListView(ListView):
     model = Post
-    template_name = 'blog/home.html'
+    template_name = 'blog/blog.html'
     context_object_name = 'posts'
     ordering = ['-created_at']
     paginate_by = 5
@@ -58,6 +57,3 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
-
-def about(request):
-    return render(request, 'blog/about.html', {'title':'About'})
