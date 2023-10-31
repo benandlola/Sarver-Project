@@ -5,3 +5,4 @@ TODO
 - convert to react 
 - try to do something with API, fetch youtube data, play spotify music while on site, something
 - add comments to posts
+-  http://127.0.0.1:8000/ to urls

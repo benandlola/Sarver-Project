@@ -20,10 +20,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
+from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('blog.urls')),
+    path('blog', include('blog.urls')),
     path('register/', include('users.urls')),
     path('markets/', include('trading.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
@@ -37,3 +39,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
