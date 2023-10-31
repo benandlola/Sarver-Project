@@ -1,3 +1,4 @@
+'''
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post
@@ -57,3 +58,22 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+'''
+from rest_framework import generics
+from .models import Post
+from .serializers import PostSerializer
+
+class PostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class UserPostListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        return Post.objects.filter(author__username=username)
+
+class PostDetailView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
