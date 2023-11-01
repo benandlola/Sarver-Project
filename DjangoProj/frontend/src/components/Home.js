@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import Header from './Header';
+import Register from './Register';
+import Login from './Login';
+
 export default function Home() {
   const [posts, setPosts] = useState([]);
 
@@ -35,6 +39,7 @@ export default function Home() {
     });
   }
 
+  //view a specific post
   const viewPost = (id) => {
     fetch(`http://127.0.0.1:8000/blog/post/${id}/`, {
       method: 'GET',
@@ -51,6 +56,7 @@ export default function Home() {
     });
   }
 
+  //show the posts
   const renderPost = (post) => {
     return (
       <article className="media content-section" key={post.id}>
@@ -67,25 +73,38 @@ export default function Home() {
     );
   };
   
-  return (
-    <div>
-      <Header />
-      <main role="main" className="container">
-        <div className="row">
-          <div className="col-md-8">
-            {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}
+  const renderHome = () => {
+    return (
+      <div>
+        <Header />
+        <main role="main" className="container">
+          <div className="row">
+            <div className="col-md-8">
+              {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}
+            </div>
+            <div className="col-md-4">
+              <div className="content-section">
+                <h3>Information</h3>
+                <p className='text-muted'>Useful tidbits</p>
+                <ul className="list-group">
+                  <li className="list-group-item list-group-item-light"><a href="https://www.nasdaq.com/market-activity/earnings" target="_blank">Earnings Calendar</a></li>
+                </ul>
+              </div>  
+            </div>
           </div>
-          <div className="col-md-4">
-            <div className="content-section">
-              <h3>Information</h3>
-              <p className='text-muted'>Useful tidbits</p>
-              <ul className="list-group">
-                <li className="list-group-item list-group-item-light"><a href="https://www.nasdaq.com/market-activity/earnings" target="_blank">Earnings Calendar</a></li>
-              </ul>
-            </div>  
-          </div>
+          <Link className="nav-item nav-link" to='/register'>Register</Link>
+        </main>
       </div>
-    </main>
-    </div>
+    )
+  }
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/" element={renderHome()}/>
+      </Routes>
+    </Router>
   );
 }

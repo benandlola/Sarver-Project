@@ -1,8 +1,7 @@
 TODO 
-- add hovers
+- add hovers to profile pic
 - markets tab shows tradingview - can search symbols, add technicals
 - senator trading data add - charts, can html and css it
-- convert to react 
 - try to do something with API, fetch youtube data, play spotify music while on site, something
 - add comments to posts
--  http://127.0.0.1:8000/ to urls
+- Set up register protection - all fields needed
