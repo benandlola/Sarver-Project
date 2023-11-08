@@ -72,8 +72,8 @@ const Header = () =>{
                     </button>
                     <div className="collapse navbar-collapse" id="navbarToggle">
                         <div className="navbar-nav mr-auto">
-                            <a className="nav-item nav-link" href="/">Blog</a>
-                            <a className="nav-item nav-link" href="/markets">Markets</a>
+                        <Link className="nav-item nav-link" to='/'>Blog</Link>
+                            <Link className="nav-item nav-link" to='/markets'>Markets</Link>
                         </div>
                         <div className="navbar-nav">
                             {authenticated ? (

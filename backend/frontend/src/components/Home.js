@@ -7,6 +7,7 @@ import PostCreate from './PostCreate';
 import UserPosts from './UserPosts';
 import Post from './Post';
 import Profile from './Profile';
+import Markets from './Markets';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -73,6 +74,7 @@ const Home = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/markets" element={<Markets/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/post/:id" element={<Post/>}/>
         <Route path="/:username" element={<UserPosts/>}/>
