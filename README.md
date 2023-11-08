@@ -1,0 +1,7 @@
+- fix render on navigate (delete post and update profile and Create)
+- embed tradingview
+    - different widgets
+- turn into git
+- add comments
+- allow pictures in blog post
+- turn into postgres database
