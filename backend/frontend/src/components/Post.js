@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import Header from './Header';
 import getCookie from '../csrftoken';
 
 const Post = () => {
@@ -11,7 +10,7 @@ const Post = () => {
   const navigate = useNavigate();
 
   const getUser = () => {
-    fetch('http://127.0.0.1:8000/users/get_user/', {
+    fetch('users/get_user/', {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -24,7 +23,7 @@ const Post = () => {
   }
 
   const getPost = (id) => {
-    fetch(`http://127.0.0.1:8000/blog/post/${id}/`, {
+    fetch(`blog/post/${id}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',}
@@ -52,7 +51,7 @@ const Post = () => {
 
   //TODO incorporate callback
   const deletePost = (id) => {
-    fetch(`http://127.0.0.1:8000/blog/post/${id}/delete/`, {
+    fetch(`blog/post/${id}/delete/`, {
       credentials: 'include',
       method: 'DELETE',
       mode: 'same-origin',
@@ -65,8 +64,6 @@ const Post = () => {
   }
 
   return (
-    <div>
-    <Header />
     <main role="main" className="container">
       <div className="row">
         <div className="col-md-8">
@@ -81,6 +78,7 @@ const Post = () => {
                 <small className="text-muted">{post.created_at}</small>
                 {post.author.username === user.username && (
                   <div>
+                  <button className="btn btn-sm my-1"><Link to={`/post_edit/${post.id}`}>Edit Post</Link></button>
                   <button className="btn btn-danger btn-sm my-1" onClick={() => deletePost(post.id)}>Delete Post</button>
                   </div> 
                 )}
@@ -102,7 +100,6 @@ const Post = () => {
         </div>
       </div>
     </main>
-  </div>
   );
 }
 

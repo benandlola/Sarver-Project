@@ -9,7 +9,7 @@ const Header = () =>{
     
     //check if logged in
     useLayoutEffect(() => {
-        fetch('http://127.0.0.1:8000/users/is_authenticated/', {
+        fetch('users/is_authenticated/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const Header = () =>{
 
     //log out
     const logout = () => {
-        fetch('http://127.0.0.1:8000/users/logout/', {
+        fetch('users/logout/', {
             credentials: 'include',
             method: 'POST',
             mode: 'same-origin',

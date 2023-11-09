@@ -1,5 +1,4 @@
 import React, { useState, useLayoutEffect } from 'react';
-import Header from './Header';
 import { useNavigate } from "react-router-dom";
 import getCookie from '../csrftoken';
 
@@ -13,7 +12,7 @@ const Profile = () => {
 
     //get user data
     useLayoutEffect(() => {
-        fetch('http://127.0.0.1:8000/users/get_user/', {
+        fetch('users/get_user/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +44,7 @@ const Profile = () => {
         formData.append('username', username);
         formData.append('email', email);
         formData.append('image', imageFile);
-        fetch('http://127.0.0.1:8000/users/profile/update/', {
+        fetch('users/profile/update/', {
             credentials: 'include',
             method: 'POST',
             mode: 'same-origin',
@@ -69,8 +68,6 @@ const Profile = () => {
     };
 
     return (
-        <div>
-        <Header />
         <main role="main" className="container">
             <div className="row">
                 <div className="col-md-8">  
@@ -99,7 +96,7 @@ const Profile = () => {
                                 <div id="div_id_email" className="form-group"> 
                                     <label htmlFor="id_email" className=" requiredField">
                                         Email<span className="asteriskField">*</span> 
-                                    </label> s
+                                    </label> 
                                     <div> 
                                         <input type="email" name="email" value={email} maxLength="320" className="emailinput form-control" required="" id="id_email" onChange={(e) => setEmail(e.target.value)}/> 
                                     </div> 
@@ -132,7 +129,6 @@ const Profile = () => {
                 </div>
             </div>
         </main>
-        </div>
     )
 }
 

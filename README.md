@@ -1,8 +1,11 @@
-- fix render on navigate (delete post and update profile and Create)
-- embed tradingview
-    - different widgets
-- widgets folder - add view for markets
-- csrfktoken embed in form/ separate as component
-- add comments
-- allow pictures in blog post
+- reset password
+- add comments to blogs
+- ads pictures in blog post
+
+- fix render on navigate (delete post and update profile and Create, and login, and edit)
+- add stocks/ cryptos to posts
+- search by topic
+
 - turn into postgres database
+- change title
+- deploy

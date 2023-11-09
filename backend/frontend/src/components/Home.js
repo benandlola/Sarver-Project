@@ -8,13 +8,14 @@ import UserPosts from './UserPosts';
 import Post from './Post';
 import Profile from './Profile';
 import Markets from './Markets';
+import PostEdit from './PostEdit';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
 
   //grab blog data
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/blog/', {
+    fetch('blog/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',}
@@ -50,18 +51,17 @@ const Home = () => {
   const renderHome = () => {
     return (
       <div>
-        <Header />
         <main role="main" className="container">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-md-10">
               {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}
             </div>
-            <div className="col-md-4">
+            <div className="col-md-3" style={{position: 'fixed', right:'3rem' }}>
               <div className="content-section">
                 <h3>Information</h3>
                 <p className='text-muted'>Useful tidbits</p>
                 <ul className="list-group">
-                  <li className="list-group-item list-group-item-light"><a href="https://www.nasdaq.com/market-activity/earnings" target="_blank">Earnings Calendar</a></li>
+                  <li className="list-group-item list-group-item-light">Nothing yet</li>
                 </ul>
               </div>  
             </div>
@@ -73,12 +73,16 @@ const Home = () => {
 
   return (
     <Router>
+      <React.Fragment>
+      <Header />
+      </React.Fragment>
       <Routes>
         <Route path="/markets" element={<Markets/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/post/:id" element={<Post/>}/>
         <Route path="/:username" element={<UserPosts/>}/>
         <Route path="/post_create" element={<PostCreate/>}/>
+        <Route path="/post_edit/:id" element={<PostEdit/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/" element={renderHome()}/>

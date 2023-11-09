@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Header from './Header';
 import { Link, useNavigate } from "react-router-dom";
 import getCookie from '../csrftoken';
 
@@ -17,19 +16,20 @@ const Login = () => {
         username: username,
         password: password,
       };
-      fetch('http://127.0.0.1:8000/users/login/', {
+      fetch('users/login/', {
         credentials: 'include',
         method: 'POST',
         mode: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
-
+          'X-CSRFToken': csrftoken
         },
         body: JSON.stringify(formData),
       })
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
+
                 navigate('/')
             }
             else {
@@ -42,8 +42,6 @@ const Login = () => {
     };
 
     return (
-        <div>
-        <Header />
         <main role="main" className="container">
             <div className="row">
                 <div className="col-md-8">    
@@ -83,7 +81,6 @@ const Login = () => {
                 </div>
             </div>
         </main>
-        </div>
     )
 }
 

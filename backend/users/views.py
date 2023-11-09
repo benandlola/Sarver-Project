@@ -68,11 +68,9 @@ class isAuthenticated(APIView):
             return Response({'authenticated': False})
         
 class getUser(APIView):
-    serializer_class = UserSerializer
-
+    
     def get(self, request, format=None):
         serializer = UserSerializer(request.user)
-        print(serializer.data)
         return Response({'user': serializer.data})
     
 class profileUpdate(APIView):

@@ -1,10 +1,8 @@
-// TradingViewWidget.jsx
-
 import React, { useEffect, useRef } from 'react';
 
 let tvScriptLoadingPromise;
 
-export default function Tradingview() {
+export default function TradingView() {
   const onLoadScriptRef = useRef();
 
   useEffect(
