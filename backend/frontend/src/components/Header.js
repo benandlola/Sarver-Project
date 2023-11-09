@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import getCookie from '../csrftoken';
 
 const Header = () =>{
     const [authenticated, setAuthenticated] = useState(false);
@@ -20,21 +21,6 @@ const Header = () =>{
         })  
     }, [])
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
     const csrftoken = getCookie('csrftoken');
 
     //log out
@@ -50,6 +36,8 @@ const Header = () =>{
         })
         .then(response => {
             if (response.ok) {
+                setAuthenticated(false);
+                alert('You have logged out')
                 navigate('/');
             } else {
                 console.error('Logout failed');
@@ -58,8 +46,6 @@ const Header = () =>{
         .catch(error => {
             console.error('Error during logout: ', error);
         });
-        setAuthenticated(false);
-        alert('You have logged out')
     };
     
     return (

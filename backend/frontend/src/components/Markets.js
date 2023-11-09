@@ -1,5 +1,5 @@
 import React from 'react';
-import Tradingview from "./Tradingview";
+import Tradingview from "./widgets/Tradingview";
 import Header from './Header';
 
 const Markets =() => {
