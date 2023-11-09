@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import getCookie from '../csrftoken';
 
 const Header = () =>{
     const [authenticated, setAuthenticated] = useState(false);
@@ -8,7 +9,7 @@ const Header = () =>{
     
     //check if logged in
     useLayoutEffect(() => {
-        fetch('http://127.0.0.1:8000/users/is_authenticated/', {
+        fetch('users/is_authenticated/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -20,26 +21,11 @@ const Header = () =>{
         })  
     }, [])
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
     const csrftoken = getCookie('csrftoken');
 
     //log out
     const logout = () => {
-        fetch('http://127.0.0.1:8000/users/logout/', {
+        fetch('users/logout/', {
             credentials: 'include',
             method: 'POST',
             mode: 'same-origin',
@@ -50,6 +36,8 @@ const Header = () =>{
         })
         .then(response => {
             if (response.ok) {
+                setAuthenticated(false);
+                alert('You have logged out')
                 navigate('/');
             } else {
                 console.error('Logout failed');
@@ -58,8 +46,6 @@ const Header = () =>{
         .catch(error => {
             console.error('Error during logout: ', error);
         });
-        setAuthenticated(false);
-        alert('You have logged out')
     };
     
     return (
@@ -72,8 +58,8 @@ const Header = () =>{
                     </button>
                     <div className="collapse navbar-collapse" id="navbarToggle">
                         <div className="navbar-nav mr-auto">
-                            <a className="nav-item nav-link" href="/">Blog</a>
-                            <a className="nav-item nav-link" href="/markets">Markets</a>
+                        <Link className="nav-item nav-link" to='/'>Blog</Link>
+                            <Link className="nav-item nav-link" to='/markets'>Markets</Link>
                         </div>
                         <div className="navbar-nav">
                             {authenticated ? (

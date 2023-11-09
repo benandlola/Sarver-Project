@@ -86,3 +86,22 @@ a.article-title:hover {
 a {
   cursor: pointer;
 }
+
+#tradingview_593ea {
+  width: 100%;
+  height: 85vh;
+}
+
+.tradingview-widget-container {
+  height: "100%";
+  width: "100%";
+  margin: 1rem;
+}
+
+#markets {
+  max-width: 2000px;
+}
+
+.market-nav {
+  max-width: 20%;
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './Header';
 import { useNavigate, Link } from "react-router-dom";
+import getCookie from '../csrftoken';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -9,21 +9,6 @@ const Register = () => {
     const [password2, setPassword2] = useState('');
     const navigate = useNavigate();
     
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
     const csrftoken = getCookie('csrftoken');
 
     //register the user
@@ -35,7 +20,7 @@ const Register = () => {
         password1: password1,
         password2: password2,
       };
-      fetch('http://127.0.0.1:8000/users/register/', {
+      fetch('users/register/', {
         credentials: 'include',
         method: 'POST',
         mode: 'same-origin',
@@ -60,8 +45,6 @@ const Register = () => {
     };
 
     return (
-        <div>
-        <Header />
         <main role="main" className="container">
             <div className="row">
                 <div className="col-md-8">    
@@ -128,7 +111,6 @@ const Register = () => {
                 </div>
             </div>
         </main>
-        </div>
     )
 }
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Header from './Header';
 import { Link, useParams } from 'react-router-dom';
 
 const UserPosts = (props) => {
@@ -12,7 +11,7 @@ const UserPosts = (props) => {
   }, [username]);
 
   const viewUserPosts = (username) => {
-    fetch(`http://127.0.0.1:8000/blog/${username}/`, {
+    fetch(`blog/${username}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',}
@@ -46,29 +45,29 @@ const UserPosts = (props) => {
   };
 
   return (
-    <div>
-        <Header />
         <main role="main" className="container">
           <div className="row">
             <div className="col-md-8">
               {loading ? (
                 <p>Loading...</p>
-              ) : (
-                Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)
+              ) : (   
+                <React.Fragment>
+                <h2>{posts[0].author.username}'s posts</h2> <br></br>
+                {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}
+                </React.Fragment>
               )}
             </div>
             <div className="col-md-4">
               <div className="content-section">
                 <h3>Information</h3>
                 <p className='text-muted'>Useful tidbits</p>
-                <ul className="list-group">
+                <ul className="list-group">           
                   <li className="list-group-item list-group-item-light"><a href="https://www.nasdaq.com/market-activity/earnings" target="_blank">Earnings Calendar</a></li>
                 </ul>
               </div>  
             </div>
           </div>
         </main>
-      </div>
   );
 }
 export default UserPosts;

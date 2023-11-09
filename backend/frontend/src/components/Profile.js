@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
-import Header from './Header';
 import { useNavigate } from "react-router-dom";
+import getCookie from '../csrftoken';
 
 const Profile = () => {
     const [username, setUsername] = useState('');
@@ -12,7 +12,7 @@ const Profile = () => {
 
     //get user data
     useLayoutEffect(() => {
-        fetch('http://127.0.0.1:8000/users/get_user/', {
+        fetch('users/get_user/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,22 +27,6 @@ const Profile = () => {
         })  
     }, [])
 
-    //get cookie
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
     const csrftoken = getCookie('csrftoken');
 
     const handleImageChange = (e) => {
@@ -60,7 +44,7 @@ const Profile = () => {
         formData.append('username', username);
         formData.append('email', email);
         formData.append('image', imageFile);
-        fetch('http://127.0.0.1:8000/users/profile/update/', {
+        fetch('users/profile/update/', {
             credentials: 'include',
             method: 'POST',
             mode: 'same-origin',
@@ -84,8 +68,6 @@ const Profile = () => {
     };
 
     return (
-        <div>
-        <Header />
         <main role="main" className="container">
             <div className="row">
                 <div className="col-md-8">  
@@ -114,7 +96,7 @@ const Profile = () => {
                                 <div id="div_id_email" className="form-group"> 
                                     <label htmlFor="id_email" className=" requiredField">
                                         Email<span className="asteriskField">*</span> 
-                                    </label> s
+                                    </label> 
                                     <div> 
                                         <input type="email" name="email" value={email} maxLength="320" className="emailinput form-control" required="" id="id_email" onChange={(e) => setEmail(e.target.value)}/> 
                                     </div> 
@@ -147,7 +129,6 @@ const Profile = () => {
                 </div>
             </div>
         </main>
-        </div>
     )
 }
 
