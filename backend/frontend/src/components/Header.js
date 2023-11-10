@@ -1,52 +1,9 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
+import { useAuth } from './AuthContext';
 
 const Header = () =>{
-    const [authenticated, setAuthenticated] = useState(false);
-    const navigate = useNavigate();
-    
-    //check if logged in
-    useLayoutEffect(() => {
-        fetch('users/is_authenticated/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            setAuthenticated(data.authenticated)
-        })  
-    }, [])
-
-    const csrftoken = getCookie('csrftoken');
-
-    //log out
-    const logout = () => {
-        fetch('users/logout/', {
-            credentials: 'include',
-            method: 'POST',
-            mode: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                setAuthenticated(false);
-                alert('You have logged out')
-                navigate('/');
-            } else {
-                console.error('Logout failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error during logout: ', error);
-        });
-    };
+    const { authenticated, logout } = useAuth();
     
     return (
         <header className="site-header">

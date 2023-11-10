@@ -13,5 +13,20 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'created_at', 'author', 'edited']
+        fields = '__all__'
+        read_only_fields = ['author'] 
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+    created_at = serializers.SerializerMethodField()
+
+    def get_created_at(self, obj):
+        if obj.edited == True:
+            return obj.created_at.strftime("%B %d, %Y, %I:%M %p") + ' (edited)'
+        return obj.created_at.strftime("%B %d, %Y, %I:%M %p")
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
         read_only_fields = ['author'] 

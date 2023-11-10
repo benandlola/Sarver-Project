@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import getCookie from '../csrftoken';
 
-const Post = () => {
+const Post = ({ getBlog }) => {
   const { id } = useParams(); 
   const [post, setPost] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,8 +49,8 @@ const Post = () => {
 
   const csrftoken = getCookie('csrftoken');
 
-  //TODO incorporate callback
-  const deletePost = (id) => {
+  //added callback
+  const handleDelete = (id) => {
     fetch(`blog/post/${id}/delete/`, {
       credentials: 'include',
       method: 'DELETE',
@@ -60,7 +60,10 @@ const Post = () => {
         'X-CSRFToken': csrftoken
       },
     })  
-    .then(() => navigate('/'))
+    .then(() => {
+      getBlog();
+      navigate('/')
+    })
   }
 
   return (
@@ -79,7 +82,7 @@ const Post = () => {
                 {post.author.username === user.username && (
                   <div>
                   <button className="btn btn-sm my-1"><Link to={`/post_edit/${post.id}`}>Edit Post</Link></button>
-                  <button className="btn btn-danger btn-sm my-1" onClick={() => deletePost(post.id)}>Delete Post</button>
+                  <button className="btn btn-danger btn-sm my-1" onClick={() => handleDelete(post.id)}>Delete Post</button>
                   </div> 
                 )}
               </div>

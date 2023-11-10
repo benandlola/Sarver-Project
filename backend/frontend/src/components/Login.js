@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import getCookie from '../csrftoken';
+import { useAuth } from './AuthContext';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    
+    const { login } = useAuth(); 
     const csrftoken = getCookie('csrftoken');
 
     //Log the User in
@@ -29,7 +30,7 @@ const Login = () => {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-
+                login()
                 navigate('/')
             }
             else {

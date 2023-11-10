@@ -1,11 +1,21 @@
 - reset password
-- add comments to blogs
-- ads pictures in blog post
+- style comments
+- can create/edit comments
 
-- fix render on navigate (delete post and update profile and Create, and login, and edit)
+- get rid of titles; make content have X max length
+- make comments have X max length
+- following of profiles
+- back button
+
 - add stocks/ cryptos to posts
 - search by topic
 
 - turn into postgres database
+- add pictures to comments
+- click on pictures to show full picture
+- gif search
+- change add image to image button/ not browse - for posts, profile 
+
+
 - change title
 - deploy

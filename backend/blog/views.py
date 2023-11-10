@@ -1,16 +1,22 @@
 from rest_framework.views import APIView
-from .models import Post
-from .serializers import PostSerializer
+from .models import *
+from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 class PostListView(APIView):
     def get(self, request, format=None):
-        queryset = Post.objects.all().order_by('-created_at')
-        serializer = PostSerializer(queryset, many=True)
-
-        return Response(serializer.data)
+        posts = Post.objects.all().order_by('-created_at')
+        serialized_data = []
+        for post in posts:
+            post_serializer = PostSerializer(post)
+            comments = Comment.objects.filter(post=post)
+            comments_serializer = CommentSerializer(comments, many=True)
+            post_data = post_serializer.data
+            post_data['comments'] = comments_serializer.data
+            serialized_data.append(post_data)
+        return Response(serialized_data)
 
 class UserPostListView(APIView):
     def get(self, request, username, format=None):
@@ -37,8 +43,6 @@ class PostCreateView(APIView):
             serializer.save(author=self.request.user)
         
         return Response(serializer.data)
-
-
 
 class PostDeleteView(APIView):
     permission_classes = [IsAuthenticated]
