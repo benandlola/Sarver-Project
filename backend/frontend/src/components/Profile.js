@@ -105,11 +105,9 @@ const Profile = ({ getBlog }) => {
                                 <div id="div_id_image" className="form-group"> 
                                     <label htmlFor="id_image" className=" requiredField">
                                         Image<span className="asteriskField">*</span> 
-                                    </label> 
-                                    <div>
-                                        Currently: <a href={image}>{image}</a><br/>
-                                        Change: <input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
-                                    </div> 
+                                        <br/>
+                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" style={{ display: 'none' }} onChange={handleImageChange}/> 
+                                    </label>  
                                 </div>
                             </fieldset>
                             <div className="form-group">

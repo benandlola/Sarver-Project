@@ -1311,6 +1311,11 @@
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.4.3"
 
+"bootstrap-icons@^1.11.1":
+  "integrity" "sha512-F0DDp7nKUX+x/QtpfRZ+XHFya60ng9nfdpdS59vDDfs4Uhuxp7zym/QavMsu/xx51txkoM9eVmpE7D08N35blw=="
+  "resolved" "https://registry.npmjs.org/bootstrap-icons/-/bootstrap-icons-1.11.1.tgz"
+  "version" "1.11.1"
+
 "browserslist@^4.14.5", "browserslist@^4.21.9", "browserslist@^4.22.1", "browserslist@>= 4.21.0":
   "integrity" "sha512-FEVc202+2iuClEhZhrWy6ZiAcRLvNMyYcxZ8raemul1DYVOVdFsbqckWLdsixQZCpJlwe77Z3UTalE7jsjnKfQ=="
   "resolved" "https://registry.npmjs.org/browserslist/-/browserslist-4.22.1.tgz"

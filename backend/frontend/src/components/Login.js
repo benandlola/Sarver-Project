@@ -11,7 +11,7 @@ const Login = () => {
     const csrftoken = getCookie('csrftoken');
 
     //Log the User in
-    const handleSubmit = (e) => {
+    const handleLogin = (e) => {
       e.preventDefault();   
       const formData = {
         username: username,
@@ -47,7 +47,7 @@ const Login = () => {
             <div className="row">
                 <div className="col-md-8">    
                     <div className="content-section">
-                        <form method="POST" onSubmit={handleSubmit}>
+                        <form method="POST" onSubmit={handleLogin}>
                             <fieldset className="form-group">
                                 <legend className="border-bottom mb-4">Login</legend>
                                 <div id="div_id_username" className="form-group"> 

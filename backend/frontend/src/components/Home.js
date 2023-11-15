@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Header from './Header';
 import Register from './Register';
@@ -12,26 +12,11 @@ import PostEdit from './PostEdit';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getBlog();
   }, [posts]);
-
-  //check if logged in
-  useLayoutEffect(() => {
-      fetch('users/is_authenticated/', {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-      })
-      .then(response => response.json())
-      .then(data => {
-          setAuthenticated(data.authenticated)
-      })  
-  }, [])
 
   //grab blog data
   const getBlog = () => {
@@ -53,41 +38,28 @@ const Home = () => {
       });
   }
 
-  //TODO
-  const handleComment = (e) => {
-    console.log('commented')
-  }
-
   //show the posts
   const renderPost = (post) => {
     return (
       <div key={post.id}>
-      <article className="media content-section">
-        <Link className="nav-item nav-link" to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
-        <div className="media-body">
-          <div className="article-metadata">
-            <Link className="nav-item nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
-            <small className="text-muted">{post.created_at}</small>
-          </div>
-          <h2><Link className="nav-item nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
-          <p className="article-content">{post.content}</p>
-          {post.image && <img className="blog-img" src={post.image}/>}
-          <div>
-          {post.comments && post.comments.map((comment) => (
-            <div key={comment.id}>
-              {comment.content}
-            </div>
-          ))}
+      <article className="media content-section mb-0 mt-3">
+        <div className="d-flex align-items-center article-metadata">
+          <Link to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
+          <div className="ml-2">
+          <Link className="nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
+          <small className="text-muted">{post.created_at}</small>
           </div>
         </div>
+        <div className="media-body">
+          <h2><Link className="nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
+          <p className="article-content" style={{ wordWrap: 'break-word', maxWidth: '100%' }}>{post.content}</p>
+          {post.image && <img className="blog-img mx-auto" src={post.image}/>}
+        </div>
+        {post.comments && post.comments.length > 0 && (
+          <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
+        )} 
       </article>
-      {authenticated && (
-        <form method="post" onSubmit={handleComment}>
-          <fieldset className="form-group">
-            add comment
-          </fieldset>
-        <button type="submit">Comment</button>
-        </form>)}
+
       </div>
     );
   };
@@ -97,7 +69,7 @@ const Home = () => {
       <div>
         <main role="main" className="container">
           <div className="row">
-            <div className="col-md-10">
+            <div className="col-md-9">
             {loading ? (
             <p>Loading...</p>
               ) : (
@@ -121,9 +93,9 @@ const Home = () => {
 
   return (
     <Router>
-      <React.Fragment>
+      <>
       <Header />
-      </React.Fragment>
+      </>
       <Routes>
         <Route path="/markets" element={<Markets/>}/>
         <Route path="/profile" element={<Profile getBlog={getBlog}/>}/>

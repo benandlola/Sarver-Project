@@ -21,17 +21,27 @@ class PostListView(APIView):
 class UserPostListView(APIView):
     def get(self, request, username, format=None):
         username = self.kwargs.get('username')
-        queryset = Post.objects.filter(author__username=username).order_by('-created_at')
-        serializer = PostSerializer(queryset, many=True)
+        posts = Post.objects.filter(author__username=username).order_by('-created_at')
+        serialized_data = []
+        for post in posts:
+            post_serializer = PostSerializer(post)
+            comments = Comment.objects.filter(post=post)
+            comments_serializer = CommentSerializer(comments, many=True)
+            post_data = post_serializer.data
+            post_data['comments'] = comments_serializer.data
+            serialized_data.append(post_data)
 
-        return Response(serializer.data)
+        return Response(serialized_data)
 
 class PostDetailView(APIView):
     def get(self, request, pk, format=None):
         post = Post.objects.get(pk=pk)
-        serializer = PostSerializer(post)
-
-        return Response(serializer.data)
+        post_serializer = PostSerializer(post)
+        comments = Comment.objects.filter(post=post)
+        comments_serializer = CommentSerializer(comments, many=True)
+        post_data = post_serializer.data
+        post_data['comments'] = comments_serializer.data
+        return Response(post_data)
 
 class PostCreateView(APIView):
     permission_classes = [IsAuthenticated]

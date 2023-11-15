@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import getCookie from '../csrftoken';
 
 const AuthContext = createContext();
 
@@ -24,30 +22,8 @@ export const AuthProvider = ({ children }) => {
       });
   }, []);
 
-  const csrftoken = getCookie('csrftoken');
-
   //logout 
   const logout = () => {
-    fetch('users/logout/', {
-        credentials: 'include',
-        method: 'POST',
-        mode: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken
-        },
-    })
-    .then(response => {
-        if (response.ok) {
-            setAuthenticated(false);
-            alert('You have logged out')
-        } else {
-            console.error('Logout failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error during logout: ', error);
-    });
     setAuthenticated(false);
   };
 

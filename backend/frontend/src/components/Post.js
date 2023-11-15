@@ -73,24 +73,40 @@ const Post = ({ getBlog }) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-          <article className="media content-section" key={post.id}>
-            <Link className="nav-item nav-link" to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
-            <div className="media-body">
-              <div className="article-metadata">
-                <Link className="nav-item nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
-                <small className="text-muted">{post.created_at}</small>
-                {post.author.username === user.username && (
+          <>
+          <article className="media content-section mb-0">
+            <div className="d-flex align-items-center article-metadata">
+              <Link to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
+              <div className="ml-2">
+              <Link className="nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
+              <small className="text-muted">{post.created_at}</small>
+              {post.author.username === user.username && (
                   <div>
-                  <button className="btn btn-sm my-1"><Link to={`/post_edit/${post.id}`}>Edit Post</Link></button>
-                  <button className="btn btn-danger btn-sm my-1" onClick={() => handleDelete(post.id)}>Delete Post</button>
+                  <button className="btn btn-sm my-1"><Link to={`/post_edit/${post.id}`}><i className="bi bi-pencil"></i></Link></button>
+                  <button className="btn btn-danger btn-sm my-1" onClick={() => handleDelete(post.id)}><i className="bi bi-trash"></i></button>
                   </div> 
                 )}
               </div>
-              <h2><Link className="nav-item nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
-              <p className="article-content">{post.content}</p>
             </div>
-          </article>
-          ) }
+            <div className="media-body">
+              <h2><Link className="nav-item nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
+              <p className="article-content" style={{ wordWrap: 'break-word', maxWidth: '100%' }}>{post.content}</p>
+              {post.image && <img className="blog-img" src={post.image}/>}
+            </div>
+          </article>  
+          {post.comments && (
+            <>
+            {post.comments.map((comment) => (
+              <div className="card">
+                <div className="card-body" key={comment.id} >
+                  <p>{comment.content}</p>
+                </div>
+              </div>
+            ))}
+            </>
+            )}   
+          </>
+          )}  
         </div>
         <div className="col-md-4">
           <div className="content-section">

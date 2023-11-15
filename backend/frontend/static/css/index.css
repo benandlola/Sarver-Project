@@ -112,3 +112,13 @@ a {
   width: auto;
   height: auto;
 }
+
+.nav-link:hover {
+  color: rgb(182, 147, 34); 
+}
+
+.bi-file-image {
+  font-size: 3rem;
+  color: #333;
+  cursor: pointer;
+}

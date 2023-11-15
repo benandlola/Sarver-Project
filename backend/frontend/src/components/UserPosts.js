@@ -30,17 +30,33 @@ const UserPosts = (props) => {
   //show the posts
   const renderPost = (post) => {
     return (
-      <article className="media content-section" key={post.id}>
-        <Link className="nav-item nav-link" to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
-        <div className="media-body">
-          <div className="article-metadata">
-            <Link className="nav-item nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
-            <small className="text-muted">{post.created_at}</small>
+      <div key={post.id}>
+      <article className="media content-section mb-0 mt-3">
+        <div className="d-flex align-items-center article-metadata">
+          <Link to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
+          <div className="ml-2">
+          <Link className="nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
+          <small className="text-muted">{post.created_at}</small>
           </div>
+        </div>
+        <div className="media-body">
           <h2><Link className="nav-item nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
-          <p className="article-content">{post.content}</p>
+          <p className="article-content" style={{ wordWrap: 'break-word', maxWidth: '100%' }}>{post.content}</p>
+          {post.image && <img className="blog-img" src={post.image}/>}
         </div>
       </article>
+      {post.comments && (
+        <>
+        {post.comments.map((comment) => (
+          <div className="card">
+            <div className="card-body" key={comment.id} >
+              <p>{comment.content}</p>
+            </div>
+          </div>
+        ))}
+        </>
+        )} 
+      </div>
     );
   };
 
@@ -51,10 +67,10 @@ const UserPosts = (props) => {
               {loading ? (
                 <p>Loading...</p>
               ) : (   
-                <React.Fragment>
+                <>
                 <h2>{posts[0].author.username}'s posts</h2> <br></br>
                 {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}
-                </React.Fragment>
+                </>
               )}
             </div>
             <div className="col-md-4">
