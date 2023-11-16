@@ -58,7 +58,7 @@ const Login = () => {
                                         <input type="text" name="username" autoFocus="" autoCapitalize="none" autoComplete="username" maxLength="150" className="textinput form-control" required="" id="id_username" value={username} onChange={(e) => setUsername(e.target.value)}/> 
                                     </div> 
                                 </div> 
-                                <div id="div_id_password" className="form-group"> 
+                                <div id="div_id_password" className="form-group pb-2"> 
                                     <label htmlFor="id_password" className=" requiredField">
                                         Password<span className="asteriskField">*</span> 
                                     </label> 
@@ -68,8 +68,8 @@ const Login = () => {
                                 </div>
                             </fieldset>
                             <div className="form-group">
-                                <button className="btn btn-outline-info" type="submit">Login</button>
-                                <small className="text-muted ml-2">
+                                <button className="btn btn-outline-info mr-3" type="submit">Login</button>
+                                <small className="text-muted">
                                     <a href="#">Forgot Password?</a>
                                 </small>
                             </div>

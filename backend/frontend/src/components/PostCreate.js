@@ -68,7 +68,7 @@ const PostCreate = ({ getBlog }) => {
                                     <label htmlFor="id_image" className=" requiredField">
                                         Image<span className="asteriskField">*</span> 
                                         <br/>
-                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" style={{ display: 'none' }} onChange={handleImageChange}/> 
+                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
                                     </label> 
                                     <div>
                                     <img className="blog-img mb-1" src={image}/>

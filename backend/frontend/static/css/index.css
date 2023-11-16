@@ -40,13 +40,11 @@ ul {
   color: #444444;
 }
 
-a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
-}
 
 .article-content {
   white-space: pre-line;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .article-img {
@@ -59,11 +57,6 @@ a.article-title:hover {
   padding-bottom: 1px;
   margin-bottom: 4px;
   border-bottom: 1px solid #e3e3e3
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
 }
 
 .article-svg {
@@ -113,12 +106,36 @@ a {
   height: auto;
 }
 
-.nav-link:hover {
-  color: rgb(182, 147, 34); 
-}
-
 .bi-file-image {
   font-size: 3rem;
   color: #333;
   cursor: pointer;
+}
+
+.col-md-3 {
+  position: fixed;
+  right: 3rem;
+}
+
+.clearablefileinput.form-control-file {
+  display: none;
+}
+
+.post-click {
+  text-decoration: None;
+  color: inherit;
+}
+
+.create-comment:hover {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: lightgray;
+}
+
+
+.btn-outline-info {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
 }

@@ -42,24 +42,43 @@ const Home = () => {
   const renderPost = (post) => {
     return (
       <div key={post.id}>
-      <article className="media content-section mb-0 mt-3">
+      <article className="media content-section mb-0 mt-3 clickable">
+        <Link className="post-click" to={`/${post.author.username}`}>
         <div className="d-flex align-items-center article-metadata">
-          <Link to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
-          <div className="ml-2">
-          <Link className="nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
+          <img className="rounded-circle article-img" src={post.author.profile.image} alt=""/>
+          <div className="ml-2 d-flex flex-column align-items-start">
+          {post.author.username} 
           <small className="text-muted">{post.created_at}</small>
-          </div>
+          </div>  
         </div>
-        <div className="media-body">
-          <h2><Link className="nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
-          <p className="article-content" style={{ wordWrap: 'break-word', maxWidth: '100%' }}>{post.content}</p>
+        </Link>  
+        <Link className="post-click" to={`/post/${post.id}`}>
+        <div className="media-body">      
+          <h2>{post.title}</h2>   
+          <p className="article-content">{post.content}</p>
           {post.image && <img className="blog-img mx-auto" src={post.image}/>}
         </div>
+        </Link>
         {post.comments && post.comments.length > 0 && (
-          <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
-        )} 
+          <div className="container text-center row pt-3">
+            <div className="col-md-2">
+              <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
+            </div>
+            <div className="col-md-2">
+              <p>T2</p>
+            </div>
+            <div className="col-md-2">
+              <p>T3</p>
+            </div>
+            <div className="col-md-2">
+              <p>T4</p>
+            </div>
+            <div className="col-md-2">
+              <p>T5</p>
+            </div>
+          </div>
+        )}     
       </article>
-
       </div>
     );
   };
@@ -76,7 +95,7 @@ const Home = () => {
               Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)
             )}
             </div>
-            <div className="col-md-3" style={{position: 'fixed', right:'3rem' }}>
+            <div className="col-md-3">
               <div className="content-section">
                 <h3>Information</h3>
                 <p className='text-muted'>Useful tidbits</p>

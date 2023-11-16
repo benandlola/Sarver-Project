@@ -66,6 +66,10 @@ const Post = ({ getBlog }) => {
     })
   }
 
+  //create comment
+  const createComment = () => {
+    console.log('created comments')
+  }
   return (
     <main role="main" className="container">
       <div className="row">
@@ -76,10 +80,15 @@ const Post = ({ getBlog }) => {
           <>
           <article className="media content-section mb-0">
             <div className="d-flex align-items-center article-metadata">
-              <Link to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
-              <div className="ml-2">
-              <Link className="nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
+              <Link className="post-click" to={`/${post.author.username}`}>
+              <img className="rounded-circle article-img" src={post.author.profile.image} alt=""/>
+              </Link>
+              <div className="ml-2 d-flex flex-column align-items-start">
+              <Link className="post-click" to={`/${post.author.username}`}>
+                {post.author.username}
+              </Link>
               <small className="text-muted">{post.created_at}</small>
+
               {post.author.username === user.username && (
                   <div>
                   <button className="btn btn-sm my-1"><Link to={`/post_edit/${post.id}`}><i className="bi bi-pencil"></i></Link></button>
@@ -87,19 +96,45 @@ const Post = ({ getBlog }) => {
                   </div> 
                 )}
               </div>
-            </div>
+            </div>  
             <div className="media-body">
-              <h2><Link className="nav-item nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
-              <p className="article-content" style={{ wordWrap: 'break-word', maxWidth: '100%' }}>{post.content}</p>
+              <h2>{post.title}</h2>   
+              <p className="article-content">{post.content}</p>
               {post.image && <img className="blog-img" src={post.image}/>}
+            </div>
+            <div className="container text-center row pt-3">
+              <div className="col-md-2">
+                <i className="bi bi-reply create-comment" onClick={createComment}></i>  
+              </div>           
+              <div className="col-md-2">
+                <p>T2</p>
+              </div>
+              <div className="col-md-2">
+                <p>T3</p>
+              </div>
+              <div className="col-md-2">
+                <p>T4</p>
+              </div>
+              <div className="col-md-2">
+                <p>T5</p>
+              </div>
             </div>
           </article>  
           {post.comments && (
             <>
             {post.comments.map((comment) => (
-              <div className="card">
-                <div className="card-body" key={comment.id} >
-                  <p>{comment.content}</p>
+              <div className="card" key={comment.id}>
+                <div className="card-body d-flex align-items-center">
+                  <Link className="post-click" to={`/${comment.author.username}`}>
+                    <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
+                  </Link>
+                  <div className="ml-2 d-flex flex-column align-items-start">
+                    <Link className="post-click" to={`/${comment.author.username}`}>
+                      {comment.author.username}
+                    </Link>
+                    <small className="text-muted">{comment.created_at}</small>
+                    <p>{comment.content}</p>
+                  </div>
                 </div>
               </div>
             ))}

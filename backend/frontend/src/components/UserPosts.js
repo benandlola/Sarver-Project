@@ -31,31 +31,44 @@ const UserPosts = (props) => {
   const renderPost = (post) => {
     return (
       <div key={post.id}>
-      <article className="media content-section mb-0 mt-3">
+      <article className="media content-section mb-0 mt-3 clickable">
+        <Link className="post-click" to={`/${post.author.username}`}>
         <div className="d-flex align-items-center article-metadata">
-          <Link to={`/${post.author.username}`}><img className="rounded-circle article-img" src={post.author.profile.image} alt=""/></Link>
-          <div className="ml-2">
-          <Link className="nav-link" to={`/${post.author.username}`}>{post.author.username}</Link>   
+          <img className="rounded-circle article-img" src={post.author.profile.image} alt=""/>
+          <div className="ml-2 d-flex flex-column align-items-start">
+          {post.author.username}  
           <small className="text-muted">{post.created_at}</small>
           </div>
         </div>
+        </Link>
+        <Link className="post-click" to={`/post/${post.id}`}>
         <div className="media-body">
-          <h2><Link className="nav-item nav-link" to={`/post/${post.id}`}>{post.title}</Link></h2>   
-          <p className="article-content" style={{ wordWrap: 'break-word', maxWidth: '100%' }}>{post.content}</p>
+          <h2>{post.title}</h2>   
+          <p className="article-content">{post.content}</p>
           {post.image && <img className="blog-img" src={post.image}/>}
         </div>
+        </Link>
       </article>
       {post.comments && (
         <>
         {post.comments.map((comment) => (
-          <div className="card">
-            <div className="card-body" key={comment.id} >
-              <p>{comment.content}</p>
+          <div className="card" key={comment.id}>
+            <div className="card-body d-flex align-items-center">
+              <Link className="post-click" to={`/${comment.author.username}`}>
+                <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
+              </Link>
+              <div className="ml-2 d-flex flex-column align-items-start">
+                <Link className="post-click" to={`/${comment.author.username}`}>
+                  {comment.author.username}
+                </Link>
+                <small className="text-muted">{comment.created_at}</small>
+                <p>{comment.content}</p>
+              </div>
             </div>
           </div>
         ))}
         </>
-        )} 
+        )}   
       </div>
     );
   };

@@ -1,5 +1,3 @@
-+ ' \n\n(edited)'
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import getCookie from '../csrftoken';
@@ -51,7 +49,9 @@ const PostEdit = ({ getBlog }) => {
         const formData = new FormData();
         formData.append('title', document.getElementById('id_title').value);
         formData.append('content',  document.getElementById('id_content').value);
-        formData.append('image', imageFile);
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
 
         fetch(`blog/post/${id}/edit/`, {
         credentials: 'include',
@@ -97,10 +97,11 @@ const PostEdit = ({ getBlog }) => {
                             <div id="div_id_image" className="form-group"> 
                                     <label htmlFor="id_image" className=" requiredField">
                                         Image<span className="asteriskField">*</span> 
+                                        <br/>
+                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
                                     </label> 
                                     <div>
-                                        {image}
-                                        <input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
+                                    <img className="blog-img mb-1" src={image}/>
                                     </div> 
                                 </div>
                         </fieldset>
