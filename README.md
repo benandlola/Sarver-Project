@@ -1,11 +1,15 @@
-- can create/edit comments
+- TEST edit comments
+- BUG on refresh post setEdit is = true
 - reply to comments
 - add pictures to comments
+- fix folders - make helpers
+- make maxlength html for posts, comments
 
 - add better password protection - add the cases in registration
 - get rid of titles; make content have X max length (max_length=1000)
 - reset password 
 - make comments have X max length (max_length=300)
+- localize time zones
 
 - following of profiles; show num followers/ following
 - view feed
@@ -14,7 +18,6 @@
 - add share
 - add block
 - search by topic/tags
-
 
 - turn into postgres database
 - change title

@@ -48,12 +48,30 @@ const UserPosts = (props) => {
           {post.image && <img className="blog-img" src={post.image}/>}
         </div>
         </Link>
+        <div className="container text-center row pt-3">
+          <Link className="post-click col-md-2" to={`/post/${post.id}`}>
+            <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
+          </Link>
+          <div className="col-md-2">
+            <p>T2</p>
+          </div>
+          <div className="col-md-2">
+            <p>T3</p>
+          </div>
+          <div className="col-md-2">
+            <p>T4</p>
+          </div>
+          <div className="col-md-2">
+            <p>T5</p>
+          </div>
+        </div>    
       </article>
       {post.comments && (
         <>
         {post.comments.map((comment) => (
           <div className="card" key={comment.id}>
             <div className="card-body d-flex align-items-center">
+              <div className="article-content">
               <Link className="post-click" to={`/${comment.author.username}`}>
                 <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
               </Link>
@@ -62,7 +80,8 @@ const UserPosts = (props) => {
                   {comment.author.username}
                 </Link>
                 <small className="text-muted">{comment.created_at}</small>
-                <p>{comment.content}</p>
+              </div>
+                <p className="article-content">{comment.content}</p>
               </div>
             </div>
           </div>

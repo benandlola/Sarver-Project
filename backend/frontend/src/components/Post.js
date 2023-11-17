@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import getCookie from '../csrftoken';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
+import getCookie from './helpers/csrftoken';
 
 const Post = ({ getBlog }) => {
   const { id } = useParams(); 
+  const { isReply } = useLocation().state || false
   const [post, setPost] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState('');
+  const [isReplying, setIsReplying] = useState(isReply);
+  const [isEditingComment, setIsEditingComment] = useState('');
+  const [commentContent, setCommentContent] = useState('');
+  const commentRef = useRef(null);
   const navigate = useNavigate();
 
   const getUser = () => {
@@ -42,10 +47,18 @@ const Post = ({ getBlog }) => {
     });
   }
 
+  //load necessary
   useEffect(() => {
     getUser()
     getPost(id)
   }, [])
+  
+  //autofocus
+  useEffect(() => {
+    if (isReplying && commentRef.current) {
+      commentRef.current.focus();
+    }
+  }, [isReplying]);
 
   const csrftoken = getCookie('csrftoken');
 
@@ -67,9 +80,60 @@ const Post = ({ getBlog }) => {
   }
 
   //create comment
-  const createComment = () => {
-    console.log('created comments')
+  const createComment = (e) => {
+    e.preventDefault()
+    const formData = {
+      post: id,
+      content : document.getElementById('id_content').value,
+    }
+    fetch(`blog/post/${id}/comment/`, {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(() => {
+      getPost(id)
+    })
+    setIsReplying(false)
   }
+
+  //comment delete
+  const handleCommentDelete = (post_id, comment_id) => {
+    fetch(`blog/post/${post_id}/comment/${comment_id}/delete/`, {
+      credentials: 'include',
+      method: 'DELETE',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+    })  
+    .then(() => {
+      getPost(id);
+    })
+  }
+
+  //comment edit
+  const handleCommentEdit = (post_id, comment_id) => {
+    fetch(`blog/post/${post_id}/comment/${comment_id}/edit/`, {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+    })  
+    .then(() => {
+      getPost(id);
+    })
+  }
+
   return (
     <main role="main" className="container">
       <div className="row">
@@ -104,7 +168,7 @@ const Post = ({ getBlog }) => {
             </div>
             <div className="container text-center row pt-3">
               <div className="col-md-2">
-                <i className="bi bi-reply create-comment" onClick={createComment}></i>  
+                <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>  
               </div>           
               <div className="col-md-2">
                 <p>T2</p>
@@ -119,12 +183,30 @@ const Post = ({ getBlog }) => {
                 <p>T5</p>
               </div>
             </div>
-          </article>  
+          </article> 
+          {isReplying && (
+            <div className="card">
+              <div className="card-body d-flex align-items-center">
+                <form method="POST" onSubmit={createComment}>
+                  <fieldset className="form-group mb-2">
+                    <div id="div_id_content" className="form-group"> 
+                      <textarea name="content" cols="100" rows="2" className="textarea form-control" required="" id="id_content" ref={commentRef}></textarea> 
+                    </div>
+                  </fieldset>
+                  <div className="form-group">
+                    <button className="btn btn-outline-warning" onClick={() => setIsReplying(false)}><i className="bi bi-x"></i> </button>
+                    <button className="btn btn-outline-info" type="submit">Comment</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
           {post.comments && (
             <>
             {post.comments.map((comment) => (
-              <div className="card" key={comment.id}>
+              <div className="card" key={comment.id}>              
                 <div className="card-body d-flex align-items-center">
+                  <div className="article-content">
                   <Link className="post-click" to={`/${comment.author.username}`}>
                     <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
                   </Link>
@@ -133,15 +215,57 @@ const Post = ({ getBlog }) => {
                       {comment.author.username}
                     </Link>
                     <small className="text-muted">{comment.created_at}</small>
-                    <p>{comment.content}</p>
+                    {comment.author.username === user.username && (
+                      <div>
+                        <button className="btn btn-sm my-1" onClick={() => {setCommentContent(comment.content); setIsEditingComment(comment.id)}}><i className="bi bi-pencil"></i></button>
+                        <button className="btn btn-danger btn-sm my-1" onClick={() => handleCommentDelete(post.id, comment.id)}><i className="bi bi-trash"></i></button>
+                      </div> 
+                    )}
+                    </div>
+                    {isEditingComment === comment.id ? (
+                      <div className="card-body d-flex align-items-center">
+                        <form method="POST" onSubmit={handleCommentEdit}>
+                          <fieldset className="form-group mb-2">
+                            <div id="div_id_content" className="form-group"> 
+                              <textarea name="content" cols="100" rows="2" className="textarea form-control" required="" id="id_content" value={commentContent} onChange={(e) => setCommentContent(e.target.value)}></textarea> 
+                            </div>
+                          </fieldset>
+                          <div className="form-group">
+                            <button className="btn btn-outline-warning" onClick={() => setIsEditingComment('')}><i className="bi bi-x"></i> </button>
+                            <button className="btn btn-outline-info" type="submit">Edit</button>
+                          </div>
+                        </form>
+                      </div>
+                    ) : 
+                    <p className="article-content">{comment.content}</p>
+                    }           
                   </div>
                 </div>
+                <div className="container text-center row pt-3">
+              <div className="col-md-2">
+                <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>  
+              </div>           
+              <div className="col-md-2">
+                <p>T2</p>
               </div>
+              <div className="col-md-2">
+                <p>T3</p>
+              </div>
+              <div className="col-md-2">
+                <p>T4</p>
+              </div>
+              <div className="col-md-2">
+                <p>T5</p>
+              </div>
+            </div>
+              </div>
+              
             ))}
             </>
             )}   
           </>
-          )}  
+          )} 
+        
         </div>
         <div className="col-md-4">
           <div className="content-section">

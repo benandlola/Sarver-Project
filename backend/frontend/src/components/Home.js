@@ -59,25 +59,23 @@ const Home = () => {
           {post.image && <img className="blog-img mx-auto" src={post.image}/>}
         </div>
         </Link>
-        {post.comments && post.comments.length > 0 && (
-          <div className="container text-center row pt-3">
-            <div className="col-md-2">
-              <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
-            </div>
-            <div className="col-md-2">
-              <p>T2</p>
-            </div>
-            <div className="col-md-2">
-              <p>T3</p>
-            </div>
-            <div className="col-md-2">
-              <p>T4</p>
-            </div>
-            <div className="col-md-2">
-              <p>T5</p>
-            </div>
+        <div className="container text-center row pt-3">
+          <Link className="post-click col-md-2" to={`/post/${post.id}`} state={{ isReply: true}}>
+            <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
+          </Link>
+          <div className="col-md-2">
+            <p>T2</p>
           </div>
-        )}     
+          <div className="col-md-2">
+            <p>T3</p>
+          </div>
+          <div className="col-md-2">
+            <p>T4</p>
+          </div>
+          <div className="col-md-2">
+            <p>T5</p>
+          </div>
+        </div>    
       </article>
       </div>
     );

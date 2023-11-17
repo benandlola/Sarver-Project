@@ -37,7 +37,7 @@ class PostDetailView(APIView):
     def get(self, request, pk, format=None):
         post = Post.objects.get(pk=pk)
         post_serializer = PostSerializer(post)
-        comments = Comment.objects.filter(post=post)
+        comments = Comment.objects.filter(post=post).order_by('-created_at')
         comments_serializer = CommentSerializer(comments, many=True)
         post_data = post_serializer.data
         post_data['comments'] = comments_serializer.data
@@ -70,6 +70,36 @@ class PostEditView(APIView):
     def post(self, request, pk, format=None):
         post = Post.objects.get(pk=pk)
         serializer = PostSerializer(instance=post,data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=self.request.user, edited=True)
+        
+        return Response(serializer.data)
+    
+class CommentCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk, format=None):         
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+
+        return Response(serializer.data)
+    
+class CommentDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk, ck, format=None):
+        comment = Comment.objects.get(pk=ck)
+        comment.delete()
+
+        return Response(status=204)
+
+class CommentEditView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk, ck, format=None):
+        comment = Comment.objects.get(pk=ck)
+        serializer = CommentSerializer(instance=comment,data=request.data)
         if serializer.is_valid():
             serializer.save(author=self.request.user, edited=True)
         

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
+import getCookie from './helpers/csrftoken';
 
 const PostCreate = ({ getBlog }) => {
     const navigate = useNavigate();

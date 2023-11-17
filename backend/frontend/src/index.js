@@ -1,7 +1,7 @@
 import App from "./components/App";
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { AuthProvider } from './components/AuthContext';
+import { AuthProvider } from './components/helpers/AuthContext';
 
 
 

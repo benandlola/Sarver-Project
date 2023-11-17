@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
-import { useAuth } from './AuthContext';
+import getCookie from './helpers/csrftoken';
+import { useAuth } from './helpers/AuthContext';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -68,7 +68,7 @@ const Login = () => {
                                 </div>
                             </fieldset>
                             <div className="form-group">
-                                <button className="btn btn-outline-info mr-3" type="submit">Login</button>
+                                <button className="btn btn-outline-info" type="submit">Login</button>
                                 <small className="text-muted">
                                     <a href="#">Forgot Password?</a>
                                 </small>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-import getCookie from '../csrftoken';
+import { useAuth } from './helpers/AuthContext';
+import getCookie from './helpers/csrftoken';
 
 const Header = () =>{
     const { authenticated, logout } = useAuth();
