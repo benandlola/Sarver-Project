@@ -70,17 +70,19 @@ const UserPosts = (props) => {
         <>
         {post.comments.map((comment) => (
           <div className="card" key={comment.id}>
-            <div className="card-body d-flex align-items-center">
+            <div className="card-body">
               <div className="article-content">
-              <Link className="post-click" to={`/${comment.author.username}`}>
-                <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
-              </Link>
-              <div className="ml-2 d-flex flex-column align-items-start">
-                <Link className="post-click" to={`/${comment.author.username}`}>
-                  {comment.author.username}
-                </Link>
-                <small className="text-muted">{comment.created_at}</small>
-              </div>
+                <div className="d-flex align-items-center">
+                  <Link className="post-click" to={`/${comment.author.username}`}>
+                    <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
+                  </Link>
+                  <div className="ml-2 d-flex flex-column align-items-start">
+                    <Link className="post-click" to={`/${comment.author.username}`}>
+                      {comment.author.username}
+                    </Link>
+                    <small className="text-muted">{comment.created_at}</small>
+                  </div>
+                </div>
                 <p className="article-content">{comment.content}</p>
               </div>
             </div>

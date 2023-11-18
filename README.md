@@ -1,9 +1,10 @@
-- TEST edit comments
-- BUG on refresh post setEdit is = true
 - reply to comments
 - add pictures to comments
 - fix folders - make helpers
 - make maxlength html for posts, comments
+- fix header bug; add info to a footer instead component
+- header space on users click goesnowhere
+- profile seection to userposts
 
 - add better password protection - add the cases in registration
 - get rid of titles; make content have X max length (max_length=1000)

@@ -96,11 +96,11 @@ class CommentDeleteView(APIView):
 
 class CommentEditView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def post(self, request, pk, ck, format=None):
         comment = Comment.objects.get(pk=ck)
         serializer = CommentSerializer(instance=comment,data=request.data)
+
         if serializer.is_valid():
             serializer.save(author=self.request.user, edited=True)
-        
         return Response(serializer.data)
