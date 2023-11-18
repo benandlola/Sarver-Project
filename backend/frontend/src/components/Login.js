@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
+import getCookie from './helpers/csrftoken';
+import { useAuth } from './helpers/AuthContext';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    
+    const { login } = useAuth(); 
     const csrftoken = getCookie('csrftoken');
 
     //Log the User in
-    const handleSubmit = (e) => {
+    const handleLogin = (e) => {
       e.preventDefault();   
       const formData = {
         username: username,
@@ -29,7 +30,7 @@ const Login = () => {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-
+                login()
                 navigate('/')
             }
             else {
@@ -46,7 +47,7 @@ const Login = () => {
             <div className="row">
                 <div className="col-md-8">    
                     <div className="content-section">
-                        <form method="POST" onSubmit={handleSubmit}>
+                        <form method="POST" onSubmit={handleLogin}>
                             <fieldset className="form-group">
                                 <legend className="border-bottom mb-4">Login</legend>
                                 <div id="div_id_username" className="form-group"> 
@@ -57,7 +58,7 @@ const Login = () => {
                                         <input type="text" name="username" autoFocus="" autoCapitalize="none" autoComplete="username" maxLength="150" className="textinput form-control" required="" id="id_username" value={username} onChange={(e) => setUsername(e.target.value)}/> 
                                     </div> 
                                 </div> 
-                                <div id="div_id_password" className="form-group"> 
+                                <div id="div_id_password" className="form-group pb-2"> 
                                     <label htmlFor="id_password" className=" requiredField">
                                         Password<span className="asteriskField">*</span> 
                                     </label> 
@@ -68,7 +69,7 @@ const Login = () => {
                             </fieldset>
                             <div className="form-group">
                                 <button className="btn btn-outline-info" type="submit">Login</button>
-                                <small className="text-muted ml-2">
+                                <small className="text-muted">
                                     <a href="#">Forgot Password?</a>
                                 </small>
                             </div>

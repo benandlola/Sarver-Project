@@ -1,15 +1,22 @@
-+ ' \n\n(edited)'
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import getCookie from '../csrftoken';
+import getCookie from './helpers/csrftoken';
 
-const PostEdit = () => {
+const PostEdit = ({ getBlog }) => {
     const { id } = useParams(); 
     const navigate = useNavigate();
-    const [post, setPost] = useState([]);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [imageFile, setImageFile] = useState('');
+    const [image, setImage] = useState('');
+
+    const handleImageChange = (e) => {
+        if (e.target.files[0]) {
+            const file = e.target.files[0];
+            setImage(URL.createObjectURL(file));
+            setImageFile(file);
+        }
+    };
 
     const csrftoken = getCookie('csrftoken');
 
@@ -24,9 +31,9 @@ const PostEdit = () => {
           return response.json()
         })
         .then(data => {
-          setPost(data);
           setTitle(data.title);
           setContent(data.content);
+          setImage(data.image);
         })
         .catch(error => {
           console.error('Error getting post ', error);
@@ -37,11 +44,14 @@ const PostEdit = () => {
         getPost(id)
       }, [])
 
-    const editPost = (e) => {
+    const handleEdit = (e) => {
         e.preventDefault();   
         const formData = new FormData();
         formData.append('title', document.getElementById('id_title').value);
         formData.append('content',  document.getElementById('id_content').value);
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
 
         fetch(`blog/post/${id}/edit/`, {
         credentials: 'include',
@@ -52,7 +62,10 @@ const PostEdit = () => {
         },
         body: formData,
         })
-        .then(() => navigate('/'))
+        .then(() => {
+            getBlog();
+            navigate('/')
+        })
     };
 
     return (
@@ -60,7 +73,7 @@ const PostEdit = () => {
         <div className="row">
             <div className="col-md-8">             
                 <div className="content-section">
-                    <form method="POST" onSubmit={editPost}>
+                    <form method="POST" onSubmit={handleEdit}>
                         <fieldset className="form-group">
                             <legend className="border-bottom mb-4">Blog Post</legend>
                             <div id="div_id_title" className="form-group"> 
@@ -81,6 +94,16 @@ const PostEdit = () => {
                                     <textarea name="content" cols="40" rows="10" className="textarea form-control" required="" id="id_content" value={content} onChange={(e) => setContent(e.target.value)}></textarea> 
                                 </div> 
                             </div>
+                            <div id="div_id_image" className="form-group"> 
+                                    <label htmlFor="id_image" className=" requiredField">
+                                        Image<span className="asteriskField">*</span> 
+                                        <br/>
+                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
+                                    </label> 
+                                    <div>
+                                    <img className="blog-img mb-1" src={image}/>
+                                    </div> 
+                                </div>
                         </fieldset>
                         <div className="form-group">
                             <button className="btn btn-outline-info" type="submit">Edit</button>

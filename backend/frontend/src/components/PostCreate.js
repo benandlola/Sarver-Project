@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
+import getCookie from './helpers/csrftoken';
 
-const PostCreate = () => {
+const PostCreate = ({ getBlog }) => {
     const navigate = useNavigate();
+    const [imageFile, setImageFile] = useState('');
+    const [image, setImage] = useState('');
+
+    const handleImageChange = (e) => {
+        if (e.target.files[0]) {
+            const file = e.target.files[0];
+            setImage(URL.createObjectURL(file));
+            setImageFile(file);
+        }
+    };
 
     const csrftoken = getCookie('csrftoken');
 
@@ -12,7 +22,7 @@ const PostCreate = () => {
         const formData = new FormData();
         formData.append('title', document.getElementById('id_title').value);
         formData.append('content',  document.getElementById('id_content').value);
-
+        formData.append('image', imageFile);
         fetch('blog/post/create/', {
         credentials: 'include',
         method: 'POST',
@@ -22,7 +32,10 @@ const PostCreate = () => {
         },
         body: formData,
         })
-        .then(() => navigate('/'))
+        .then(() => {
+            getBlog()
+            navigate('/')
+        })
     };
 
     return (
@@ -51,6 +64,16 @@ const PostCreate = () => {
                                     <textarea name="content" cols="40" rows="10" className="textarea form-control" required="" id="id_content"></textarea> 
                                 </div> 
                             </div>
+                            <div id="div_id_image" className="form-group"> 
+                                    <label htmlFor="id_image" className=" requiredField">
+                                        Image<span className="asteriskField">*</span> 
+                                        <br/>
+                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
+                                    </label> 
+                                    <div>
+                                    <img className="blog-img mb-1" src={image}/>
+                                    </div> 
+                                </div>
                         </fieldset>
                         <div className="form-group">
                             <button className="btn btn-outline-info" type="submit">Post</button>

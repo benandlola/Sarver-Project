@@ -1,8 +1,8 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
+import getCookie from './helpers/csrftoken';
 
-const Profile = () => {
+const Profile = ({ getBlog }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [image, setImage] = useState('');
@@ -37,8 +37,8 @@ const Profile = () => {
         }
     };
 
-    //update profile TODO incorporate callback
-    const updateProfile = (e) => {
+    //update profile 
+    const handleProfileUpdate = (e) => {
         e.preventDefault();   
         const formData = new FormData();
         formData.append('username', username);
@@ -56,7 +56,8 @@ const Profile = () => {
           .then((response) => response.json())
           .then((data) => {
               if (data.success) {
-                  navigate('/')
+                    getBlog();
+                    navigate('/')
               }
               else {
                   alert(data.error)
@@ -81,7 +82,7 @@ const Profile = () => {
                                 <p className="text-secondary">{email}</p>
                             </div>
                         </div>
-                        <form method="POST" encType="multipart/form-data" onSubmit={updateProfile}>
+                        <form method="POST" encType="multipart/form-data" onSubmit={handleProfileUpdate}>
                             <fieldset className="form-group">
                                 <legend className="border-bottom mb-4">Profile Info</legend>
                                 <div id="div_id_username" className="form-group"> 
@@ -104,11 +105,9 @@ const Profile = () => {
                                 <div id="div_id_image" className="form-group"> 
                                     <label htmlFor="id_image" className=" requiredField">
                                         Image<span className="asteriskField">*</span> 
-                                    </label> 
-                                    <div>
-                                        Currently: <a href={image}>{image}</a><br/>
-                                        Change: <input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
-                                    </div> 
+                                        <br/>
+                                        <i className="bi bi-file-image"></i><input type="file" name="image" accept="image/*" className="clearablefileinput form-control-file" id="id_image" onChange={handleImageChange}/> 
+                                    </label>  
                                 </div>
                             </fieldset>
                             <div className="form-group">

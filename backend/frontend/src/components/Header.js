@@ -1,30 +1,14 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
-import getCookie from '../csrftoken';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from './helpers/AuthContext';
+import getCookie from './helpers/csrftoken';
 
 const Header = () =>{
-    const [authenticated, setAuthenticated] = useState(false);
+    const { authenticated, logout } = useAuth();
     const navigate = useNavigate();
-    
-    //check if logged in
-    useLayoutEffect(() => {
-        fetch('users/is_authenticated/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            setAuthenticated(data.authenticated)
-        })  
-    }, [])
-
     const csrftoken = getCookie('csrftoken');
 
-    //log out
-    const logout = () => {
+    const handleLogout  =() => {
         fetch('users/logout/', {
             credentials: 'include',
             method: 'POST',
@@ -36,9 +20,9 @@ const Header = () =>{
         })
         .then(response => {
             if (response.ok) {
-                setAuthenticated(false);
+                logout()
                 alert('You have logged out')
-                navigate('/');
+                navigate('/')
             } else {
                 console.error('Logout failed');
             }
@@ -46,13 +30,13 @@ const Header = () =>{
         .catch(error => {
             console.error('Error during logout: ', error);
         });
-    };
-    
+    }
+
     return (
         <header className="site-header">
             <nav className="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
                 <div className="container">
-                    <a className="navbar-brand mr-4" href="/">Home</a>
+                    <Link className="navbar-brand mr-4" to="/">Home</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                     </button>
@@ -61,18 +45,18 @@ const Header = () =>{
                         <Link className="nav-item nav-link" to='/'>Blog</Link>
                             <Link className="nav-item nav-link" to='/markets'>Markets</Link>
                         </div>
-                        <div className="navbar-nav">
+                        <div className="navbar-nav ms-auto">
                             {authenticated ? (
-                                <React.Fragment>
+                                <>
                                 <Link className="nav-item nav-link" to='/post_create'>Create Post</Link>
                                 <Link className="nav-item nav-link" to='/profile'>Profile</Link>
-                                <a className="nav-item nav-link" onClick={logout}>Logout</a>
-                                </React.Fragment>
+                                <a className="nav-item nav-link" onClick={handleLogout}>Logout</a>
+                                </>
                             ) : (
-                                <React.Fragment>
+                                <>
                                     <Link className="nav-item nav-link" to='/register'>Register</Link>
                                     <Link className="nav-item nav-link" to='/login'>Login</Link>
-                                </React.Fragment>                  
+                                </>                  
                             )}
                         </div>
                     </div>
