@@ -82,7 +82,7 @@ const PostEdit = ({ getBlog }) => {
                                     <span className="asteriskField">*</span> 
                                 </label> 
                                 <div> 
-                                    <input type="text" name="title" maxLength="100" className="textinput form-control" required="" id="id_title" value={title} onChange={(e) => setTitle(e.target.value)}/> 
+                                    <input type="text" name="title" maxLength="50" className="textinput form-control" required="" id="id_title" value={title} onChange={(e) => setTitle(e.target.value)}/> 
                                 </div> 
                             </div> 
                             <div id="div_id_content" className="form-group"> 
@@ -91,7 +91,7 @@ const PostEdit = ({ getBlog }) => {
                                     <span className="asteriskField">*</span> 
                                 </label> 
                                 <div> 
-                                    <textarea name="content" cols="40" rows="10" className="textarea form-control" required="" id="id_content" value={content} onChange={(e) => setContent(e.target.value)}></textarea> 
+                                    <textarea name="content" cols="40" rows="10" className="textarea form-control" required="" id="id_content" maxLength="1000" value={content} onChange={(e) => setContent(e.target.value)}></textarea> 
                                 </div> 
                             </div>
                             <div id="div_id_image" className="form-group"> 

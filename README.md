@@ -1,16 +1,15 @@
-- reply to comments
-- add pictures to comments
-- fix folders - make helpers
-- make maxlength html for posts, comments
-- fix header bug; add info to a footer instead component
-- header space on users click goesnowhere
-- profile seection to userposts
+FOR 11/29/23
+- length of replies on comments posts userlist
+- fix header switching bug bug; add info to a footer instead component
+- header space on users click goes nowhere
+- profile section to userposts
+- fix folders - make helpers (a lot of functions and html are reused!!)
 
+FOR 11/30/23
+- add pictures to comments
 - add better password protection - add the cases in registration
-- get rid of titles; make content have X max length (max_length=1000)
-- reset password 
-- make comments have X max length (max_length=300)
 - localize time zones
+- reset password 
 
 - following of profiles; show num followers/ following
 - view feed

@@ -9,6 +9,7 @@ import Post from './Post';
 import Profile from './Profile';
 import Markets from './Markets';
 import PostEdit from './PostEdit';
+import Comment from './Comment';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -114,6 +115,7 @@ const Home = () => {
       <Header />
       </>
       <Routes>
+        <Route path="post/:p_id/comment/:c_id" element={<Comment/>}/>
         <Route path="/markets" element={<Markets/>}/>
         <Route path="/profile" element={<Profile getBlog={getBlog}/>}/>
         <Route path="/post/:id" element={<Post getBlog={getBlog}/>}/>

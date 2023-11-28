@@ -52,7 +52,7 @@ const PostCreate = ({ getBlog }) => {
                                     <span className="asteriskField">*</span> 
                                 </label> 
                                 <div> 
-                                    <input type="text" name="title" maxLength="100" className="textinput form-control" required="" id="id_title"/> 
+                                    <input type="text" name="title" maxLength="50" className="textinput form-control" required="" id="id_title"/> 
                                 </div> 
                             </div> 
                             <div id="div_id_content" className="form-group"> 
@@ -61,7 +61,7 @@ const PostCreate = ({ getBlog }) => {
                                     <span className="asteriskField">*</span> 
                                 </label> 
                                 <div> 
-                                    <textarea name="content" cols="40" rows="10" className="textarea form-control" required="" id="id_content"></textarea> 
+                                    <textarea name="content" cols="40" rows="10" className="textarea form-control" required="" id="id_content" maxLength="1000"></textarea> 
                                 </div> 
                             </div>
                             <div id="div_id_image" className="form-group"> 
