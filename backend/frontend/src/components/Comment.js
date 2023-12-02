@@ -221,7 +221,7 @@ const Comment = () => {
                 <div className="container text-center row pt-3">
                     <div className="col-md-2">
                         <Link className="post-click" to={`/post/${p_id}/comment/${reply.id}`}>
-                        <i className="bi bi-filter-square-fill pr-4"/> TODO LENGTH
+                        <i className="bi bi-filter-square-fill pr-4"/> {comment.replies.length}
                         </Link>
                      </div>          
                     <div className="col-md-2">

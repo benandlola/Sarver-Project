@@ -252,7 +252,7 @@ const Post = ({ getBlog }) => {
                 <div className="container text-center row pt-3">
                   <div className="col-md-2">
                     <Link className="post-click" to={`comment/${comment.id}`}>
-                    <i className="bi bi-filter-square-fill pr-4"/> {comment.replies_count} asd
+                    <i className="bi bi-filter-square-fill pr-4"/> {comment.replies.length}
                     </Link>
                   </div>           
                   <div className="col-md-2">

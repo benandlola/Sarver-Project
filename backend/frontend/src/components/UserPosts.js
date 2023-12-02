@@ -32,7 +32,6 @@ const UserPosts = (props) => {
     return (
       <div key={post.id}>
       <article className="media content-section mb-0 mt-3 clickable">
-        <Link className="post-click" to={`/${post.author.username}`}>
         <div className="d-flex align-items-center article-metadata">
           <img className="rounded-circle article-img" src={post.author.profile.image} alt=""/>
           <div className="ml-2 d-flex flex-column align-items-start">
@@ -40,7 +39,6 @@ const UserPosts = (props) => {
           <small className="text-muted">{post.created_at}</small>
           </div>
         </div>
-        </Link>
         <Link className="post-click" to={`/post/${post.id}`}>
         <div className="media-body">
           <h2>{post.title}</h2>   
@@ -102,8 +100,10 @@ const UserPosts = (props) => {
                 <p>Loading...</p>
               ) : (   
                 <>
-                <h2>{posts[0].author.username}'s posts</h2> <br></br>
-                {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}
+                <div className="grid text-center mb-2"> 
+                  <h2>{posts[0].author.username}'s posts</h2> 
+                </div>
+                {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}      
                 </>
               )}
             </div>

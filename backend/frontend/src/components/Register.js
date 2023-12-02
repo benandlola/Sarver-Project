@@ -104,7 +104,7 @@ const Register = () => {
                         </form>
                         <div className="border-top pt-3">
                             <small className="text-muted">Already Have An Account?
-                            <Link className="nav-item nav-link" to='/login'>Sign In</Link>
+                            <Link className="nav-item nav-link link-primary" to='/login'>Sign In</Link>
                             </small>
                         </div>
                     </div>

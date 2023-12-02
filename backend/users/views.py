@@ -34,7 +34,7 @@ class Register(APIView):
         except:
                 return Response({ 'error': 'Something went wrong when registering account' })
 
-#TODO add better ressponses 
+
 class Login(APIView):
     def post(self, request, format=None):
         data = request.data

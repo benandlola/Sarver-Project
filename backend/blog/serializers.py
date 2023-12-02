@@ -20,12 +20,18 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     created_at = serializers.SerializerMethodField()
+    replies = serializers.SerializerMethodField()
+
 
     def get_created_at(self, obj):
         if obj.edited == True:
             return obj.created_at.strftime("%B %d, %Y, %I:%M %p") + ' (edited)'
         return obj.created_at.strftime("%B %d, %Y, %I:%M %p")
 
+    def get_replies(self, comment):
+        replies = Comment.objects.filter(parent=comment).order_by('-created_at')
+        return CommentSerializer(replies, many=True).data
+    
     class Meta:
         model = Comment
         fields = '__all__'

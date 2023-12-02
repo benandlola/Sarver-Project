@@ -43,7 +43,7 @@ class PostDetailView(APIView):
         post_data['comments'] = comments_serializer.data
 
         return Response(post_data)
-
+    
 class PostCreateView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
