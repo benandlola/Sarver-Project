@@ -13,6 +13,7 @@ const Post = ({ getBlog }) => {
   const [commentContent, setCommentContent] = useState('');
   const commentRef = useRef(null);
   const navigate = useNavigate();
+  const csrftoken = getCookie('csrftoken');
 
   const getUser = () => {
     fetch('users/get_user/', {
@@ -59,8 +60,6 @@ const Post = ({ getBlog }) => {
       commentRef.current.focus();
     }
   }, [isReplying]);
-
-  const csrftoken = getCookie('csrftoken');
 
   //added callback
   const handleDelete = (id) => {
@@ -140,6 +139,7 @@ const Post = ({ getBlog }) => {
     })
   }
 
+  console.log(post.comments)
   return (
     <main role="main" className="container">
       <div className="row">
@@ -174,7 +174,7 @@ const Post = ({ getBlog }) => {
             </div>
             <div className="container text-center row pt-3">
               <div className="col-md-2">
-                <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>  
+                <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>
               </div>           
               <div className="col-md-2">
                 <p>T2</p>
@@ -196,7 +196,7 @@ const Post = ({ getBlog }) => {
                 <form method="POST" onSubmit={createComment}>
                   <fieldset className="form-group mb-2">
                     <div id="div_id_content" className="form-group"> 
-                      <textarea name="content" cols="100" rows="2" className="textarea form-control" required="" id="id_content" ref={commentRef}></textarea> 
+                      <textarea name="content" cols="100" rows="2" className="textarea form-control" required="" id="id_content" maxLength="300" ref={commentRef}></textarea> 
                     </div>
                   </fieldset>
                   <div className="form-group">
@@ -210,7 +210,7 @@ const Post = ({ getBlog }) => {
           {post.comments && (
             <>
             {post.comments.map((comment) => (
-              <div className="card" key={comment.id}>              
+              <div className="card clickable" key={comment.id}>              
                 <div className="card-body">
                   <div className="article-content">
                     <div className="d-flex align-items-center">
@@ -245,13 +245,15 @@ const Post = ({ getBlog }) => {
                         </form>
                       </div>
                     ) : 
-                    <p className="article-content">{comment.content}</p>
+                    <Link className="post-click" to={`comment/${comment.id}`}><p className="article-conten">{comment.content}</p></Link>
                     }           
                   </div>
                 </div>
                 <div className="container text-center row pt-3">
                   <div className="col-md-2">
-                    <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>  
+                    <Link className="post-click" to={`comment/${comment.id}`}>
+                    <i className="bi bi-filter-square-fill pr-4"/> {comment.replies.length}
+                    </Link>
                   </div>           
                   <div className="col-md-2">
                     <p>T2</p>

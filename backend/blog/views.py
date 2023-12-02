@@ -11,7 +11,7 @@ class PostListView(APIView):
         serialized_data = []
         for post in posts:
             post_serializer = PostSerializer(post)
-            comments = Comment.objects.filter(post=post)
+            comments = Comment.objects.filter(post=post, parent__isnull=True).order_by('-created_at')
             comments_serializer = CommentSerializer(comments, many=True)
             post_data = post_serializer.data
             post_data['comments'] = comments_serializer.data
@@ -25,7 +25,7 @@ class UserPostListView(APIView):
         serialized_data = []
         for post in posts:
             post_serializer = PostSerializer(post)
-            comments = Comment.objects.filter(post=post)
+            comments = Comment.objects.filter(post=post, parent__isnull=True).order_by('-created_at')
             comments_serializer = CommentSerializer(comments, many=True)
             post_data = post_serializer.data
             post_data['comments'] = comments_serializer.data
@@ -37,12 +37,13 @@ class PostDetailView(APIView):
     def get(self, request, pk, format=None):
         post = Post.objects.get(pk=pk)
         post_serializer = PostSerializer(post)
-        comments = Comment.objects.filter(post=post).order_by('-created_at')
+        comments = Comment.objects.filter(post=post, parent__isnull=True).order_by('-created_at')
         comments_serializer = CommentSerializer(comments, many=True)
         post_data = post_serializer.data
         post_data['comments'] = comments_serializer.data
-        return Response(post_data)
 
+        return Response(post_data)
+    
 class PostCreateView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
@@ -103,4 +104,25 @@ class CommentEditView(APIView):
 
         if serializer.is_valid():
             serializer.save(author=self.request.user, edited=True)
+        return Response(serializer.data)
+    
+class CommentDetailView(APIView):
+    def get(self, request, pk, ck, format=None):
+        try:
+            comment = Comment.objects.get(pk=ck)
+            replies = comment.replies.all()
+            serializer = CommentSerializer(comment)
+            serialized_data = serializer.data
+            serialized_data['replies'] = CommentSerializer(replies, many=True).data
+            return Response(serialized_data)
+        except:
+            return Response(status=404)
+
+    permission_classes = [IsAuthenticated]
+    def post(self, request, pk, ck, format=None):    
+        parent = Comment.objects.get(pk=ck)  
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+             serializer.save(author=self.request.user, post=parent.post, parent=parent)
+
         return Response(serializer.data)
