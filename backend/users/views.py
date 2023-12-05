@@ -8,6 +8,8 @@ from .models import *
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from blog.models import *
+from blog.serializers import *
 import os
 
 class Register(APIView):
@@ -33,7 +35,6 @@ class Register(APIView):
                 return Response({ 'error': 'Passwords do not match' })
         except:
                 return Response({ 'error': 'Something went wrong when registering account' })
-
 
 class Login(APIView):
     def post(self, request, format=None):
@@ -107,3 +108,34 @@ class profileUpdate(APIView):
         profile.image = image
         profile.save()
         return Response({'success': True})
+
+class Feed(APIView):
+    def get(self, request, format=None):
+        user = self.request.user
+        following = user.profile.following.all()
+        posts = Post.objects.filter(author__in=following).order_by('-created_at')
+        serialized_data = []
+        for post in posts:
+            post_serializer = PostSerializer(post)
+            comments = Comment.objects.filter(post=post, parent__isnull=True).order_by('-created_at')
+            comments_serializer = CommentSerializer(comments, many=True)
+            post_data = post_serializer.data
+            post_data['comments'] = comments_serializer.data
+            serialized_data.append(post_data)
+        return Response(serialized_data)    
+
+class Follow(APIView):
+    def post(self, request, username, format=None):
+        username = self.kwargs.get('username')
+        follow = User.objects.get(username=username)
+        profile = request.user.profile
+        if follow in profile.following.all():
+            profile.following.remove(follow)
+            message = f'You unfollowed {username}.'
+            return Response({'success': False, 'message': message})
+
+        else:
+            profile.following.add(follow)
+            message = f'You are now following {username}.'
+            
+        return Response({'success': True, 'message': message})
