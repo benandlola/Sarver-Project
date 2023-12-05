@@ -1,14 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import getCookie from './helpers/csrftoken';
 
 const UserPosts = (props) => {
   const [posts, setPosts] = useState({});
   const { username } = useParams();
   const [loading, setLoading] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [user, setUser] = useState();
+  const csrftoken = getCookie('csrftoken');
 
   useEffect(() => {
     viewUserPosts(username);
+    getProfile();
   }, [username]);
+
+  const getProfile = () => {
+    fetch('users/get_user/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',}
+    })
+    .then(response => response.json())
+    .then(data => {
+      setUser(data.user)
+      const followingUsers = data.user.profile.following.map(user => user.username);
+      const isUserFollowing = followingUsers.includes(username);
+      setIsFollowing(isUserFollowing);
+    })
+    .catch(error => {
+      console.error('Error fetching user profile:', error);
+    });
+  }
 
   const viewUserPosts = (username) => {
     fetch(`blog/${username}/`, {
@@ -92,6 +115,25 @@ const UserPosts = (props) => {
     );
   };
 
+  //follow/unfollow
+  const handleFollow = (user) => {
+    fetch(`users/follow/${user}/`, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      setIsFollowing(data.success)
+    })
+    .catch(error => {
+      console.error('Error fetching data: ', error);
+    })
+  }
+
   return (
         <main role="main" className="container">
           <div className="row">
@@ -100,8 +142,10 @@ const UserPosts = (props) => {
                 <p>Loading...</p>
               ) : (   
                 <>
-                <div className="grid text-center mb-2"> 
+                <div className="grid text-center">
                   <h2>{posts[0].author.username}'s posts</h2> 
+                  {username !== user.username && ( <button type="button" className="btn btn-dark" onClick={() => handleFollow(posts[0].author.username)}> 
+                  {isFollowing ? 'Unfollow' : 'Follow'}</button>)}
                 </div>
                 {Array.isArray(posts) ? posts.map((post) => renderPost(post)) : renderPost(posts)}      
                 </>

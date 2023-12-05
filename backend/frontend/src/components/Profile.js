@@ -4,6 +4,8 @@ import getCookie from './helpers/csrftoken';
 
 const Profile = ({ getBlog }) => {
     const [username, setUsername] = useState('');
+    const [following, setFollowing] = useState('');
+    const [followers, setFollowers] = useState('');
     const [email, setEmail] = useState('');
     const [image, setImage] = useState('');
     const [imageFile, setImageFile] = useState('');
@@ -22,8 +24,11 @@ const Profile = ({ getBlog }) => {
         .then(data => {
             setUsername(data.user.username);
             setEmail(data.user.email);
-            setImage(data.user.profile.image)
+            setImage(data.user.profile.image);
+            setFollowing(data.user.profile.following.length);
+            setFollowers(data.user.profile.followers.length);
             setLoading(false);
+            console.log(data.user.profile)
         })  
     }, [])
 
@@ -80,6 +85,7 @@ const Profile = ({ getBlog }) => {
                             <div className="media-body">
                                 <h2 className="account-heading">{username}</h2>
                                 <p className="text-secondary">{email}</p>
+                                <p> {followers} Followers;  {following} Following </p>          
                             </div>
                         </div>
                         <form method="POST" encType="multipart/form-data" onSubmit={handleProfileUpdate}>
