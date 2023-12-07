@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import getCookie from './helpers/csrftoken';
 
 const Profile = ({ getBlog }) => {
@@ -28,7 +28,6 @@ const Profile = ({ getBlog }) => {
             setFollowing(data.user.profile.following.length);
             setFollowers(data.user.profile.followers.length);
             setLoading(false);
-            console.log(data.user.profile)
         })  
     }, [])
 
@@ -85,7 +84,8 @@ const Profile = ({ getBlog }) => {
                             <div className="media-body">
                                 <h2 className="account-heading">{username}</h2>
                                 <p className="text-secondary">{email}</p>
-                                <p> {followers} Followers;  {following} Following </p>          
+                                <p> {followers} Followers;  {following} Following </p>       
+                                <Link className="post-link" to={'/bookmarks'}> <i className="bi bi-bookmark-fill"/>Bookmarks </Link>  
                             </div>
                         </div>
                         <form method="POST" encType="multipart/form-data" onSubmit={handleProfileUpdate}>

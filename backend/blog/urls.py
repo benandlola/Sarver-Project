@@ -3,6 +3,8 @@ from .views import *
 
 urlpatterns = [
     path('', PostListView.as_view(), name='blog'),
+    path('like/', Like.as_view(), name='like'),
+    path('bookmark/', Bookmark.as_view(), name='bookmark'),
     path('<str:username>/', UserPostListView.as_view(), name='user-posts'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/create/', PostCreateView.as_view(), name='post-create'),

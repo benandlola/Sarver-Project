@@ -10,4 +10,5 @@ urlpatterns = [
     path('profile/update/', profileUpdate.as_view(), name='profile_update'),
     path('feed/', Feed.as_view(), name='feed'),
     path('follow/<str:username>/', Follow.as_view(), name='follow'),
+    path('bookmarks/', Bookmarks.as_view(), name='bookmarks')
 ]

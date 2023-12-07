@@ -124,6 +124,7 @@ a {
 .post-click {
   text-decoration: None;
   color: inherit;
+  cursor: pointer;
 }
 
 .create-comment:hover {

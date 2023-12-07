@@ -11,13 +11,18 @@ import Markets from './Markets';
 import PostEdit from './PostEdit';
 import Comment from './Comment';
 import Feed from './Feed';
+import Bookmarks from './Bookmarks';
+import getCookie from './helpers/csrftoken';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState('');
+  const csrftoken = getCookie('csrftoken');
 
   useEffect(() => {
     getBlog();
+    getUser();
   }, [posts]);
 
   //grab blog data
@@ -38,6 +43,53 @@ const Home = () => {
         console.error('Error fetching data: ', error);
         setLoading(true);
       });
+  }
+
+  const getUser = () => {
+    fetch('users/get_user/', {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      })
+      .then(response => response.json())
+      .then(data => {
+          setUser(data.user)
+      }) 
+  }
+
+  const handleLike = (postId) => {
+    fetch('blog/like/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({post_id: postId})
+    })
+    .then(response => response.json())
+    .then(
+      getBlog()
+    )
+  }
+
+  const handleBookmark = (postId) => {
+    fetch('blog/bookmark/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({post_id: postId})
+    })
+    .then(response => response.json())
+    .then(
+      getBlog()
+    )
   }
 
   //show the posts
@@ -63,19 +115,19 @@ const Home = () => {
         </Link>
         <div className="container text-center row pt-3">
           <Link className="post-click col-md-2" to={`/post/${post.id}`} state={{ isReply: true}}>
-            <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
+            <p className="pr-3"><i className="bi bi-filter-square-fill"/> {post.comments.length} </p>
           </Link>
-          <div className="col-md-2">
-            <p>T2</p>
+          <div className="post-click col-md-2" onClick={() => handleLike(post.id)}>
+            {post.likes.users.includes(user.username) ? ( 
+              <p><i className="bi bi-heart-fill"/> {post.likes.count}</p>
+            ): <p><i className="bi bi-heart"/>  {post.likes.count}</p>
+            }
           </div>
-          <div className="col-md-2">
-            <p>T3</p>
-          </div>
-          <div className="col-md-2">
-            <p>T4</p>
-          </div>
-          <div className="col-md-2">
-            <p>T5</p>
+          <div className="post-click col-md-2" onClick={() => handleBookmark(post.id)}>
+            {post.bookmarks.includes(user.id) ? ( 
+              <p><i className="bi bi-bookmark-fill"/></p>
+            ): <p><i className="bi bi-bookmark"/></p>
+            }
           </div>
         </div>    
       </article>
@@ -116,6 +168,7 @@ const Home = () => {
       <Header />
       </>
       <Routes>
+        <Route path="bookmarks/" element={<Bookmarks/>}/>
         <Route path="feed/" element={<Feed/>}/>
         <Route path="post/:p_id/comment/:c_id" element={<Comment/>}/>
         <Route path="/markets" element={<Markets/>}/>

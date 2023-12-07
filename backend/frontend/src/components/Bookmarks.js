@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import getCookie from './helpers/csrftoken';
 
-const Feed = () => {
+const Bookmarks = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState('');
@@ -10,13 +10,13 @@ const Feed = () => {
     const csrftoken = getCookie('csrftoken');
   
     useEffect(() => {
-      getFeed();
+      getBookmarks();
       getUser();
     }, []);
   
     //grab blog data
-    const getFeed = () => {
-      fetch('users/feed/', {
+    const getBookmarks = () => {
+      fetch('users/bookmarks/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',}
@@ -152,5 +152,4 @@ const Feed = () => {
     );
   }
   
-  export default Feed;
-  
+  export default Bookmarks;
