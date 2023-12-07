@@ -9,6 +9,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     edited = models.BooleanField(default=False)
     image = models.ImageField(null=True, upload_to='blog_pics', blank=True)
+    likes = models.ManyToManyField(User, related_name='post_likes')
+    bookmarks = models.ManyToManyField(User, related_name='bookmarked_posts')
 
     def __str__(self):
         return self.title
@@ -20,6 +22,7 @@ class Comment(models.Model):
     content = models.TextField(max_length=300)
     created_at = models.DateTimeField(default=timezone.now)
     edited = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='comment_likes')
 
     def __str__(self):
         return f'{self.author.username} - {self.post.title}'

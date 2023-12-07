@@ -139,3 +139,17 @@ class Follow(APIView):
             message = f'You are now following {username}.'
             
         return Response({'success': True, 'message': message})
+
+class Bookmarks(APIView):
+    def get(self, request, format=None):
+        user = request.user
+        bookmarks = user.bookmarked_posts.all().order_by('-created_at')
+        serialized_data = []
+        for bookmark in bookmarks:
+            post_serializer = PostSerializer(bookmark)
+            comments = Comment.objects.filter(post=bookmark, parent__isnull=True).order_by('-created_at')
+            comments_serializer = CommentSerializer(comments, many=True)
+            post_data = post_serializer.data
+            post_data['comments'] = comments_serializer.data
+            serialized_data.append(post_data)
+        return Response(serialized_data)  

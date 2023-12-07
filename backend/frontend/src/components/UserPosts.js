@@ -7,13 +7,15 @@ const UserPosts = (props) => {
   const { username } = useParams();
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState('');
+  const [viewer, setViewer] = useState('');
   const csrftoken = getCookie('csrftoken');
 
   useEffect(() => {
     viewUserPosts(username);
     getProfile();
   }, [username]);
+
 
   const getProfile = () => {
     fetch('users/get_user/', {
@@ -49,7 +51,7 @@ const UserPosts = (props) => {
       setLoading(false);
     });
   }
-    
+
   //show the posts
   const renderPost = (post) => {
     return (
@@ -73,44 +75,20 @@ const UserPosts = (props) => {
           <Link className="post-click col-md-2" to={`/post/${post.id}`}>
             <p className="pr-3"><i className="bi bi-filter-square-fill pr-4"/> {post.comments.length} </p>
           </Link>
-          <div className="col-md-2">
-            <p>T2</p>
+          <div className="post-click col-md-2" onClick={() => handleLike(post.id)}>
+            {post.likes.users.includes(user.username) ? ( 
+            <p><i className="bi bi-heart-fill"/> {post.likes.count}</p>
+            ): <p><i className="bi bi-heart"/>  {post.likes.count}</p>
+            }
           </div>
-          <div className="col-md-2">
-            <p>T3</p>
-          </div>
-          <div className="col-md-2">
-            <p>T4</p>
-          </div>
-          <div className="col-md-2">
-            <p>T5</p>
+          <div className="post-click col-md-2" onClick={() => handleBookmark(post.id)}>
+            {post.bookmarks.includes(user.id) ? ( 
+              <p><i className="bi bi-bookmark-fill"/></p>
+            ): <p><i className="bi bi-bookmark"/></p>
+            }
           </div>
         </div>    
-      </article>
-      {post.comments && (
-        <>
-        {post.comments.map((comment) => (
-          <div className="card" key={comment.id}>
-            <div className="card-body">
-              <div className="article-content">
-                <div className="d-flex align-items-center">
-                  <Link className="post-click" to={`/${comment.author.username}`}>
-                    <img className="rounded-circle article-img" src={comment.author.profile.image} alt=""/>
-                  </Link>
-                  <div className="ml-2 d-flex flex-column align-items-start">
-                    <Link className="post-click" to={`/${comment.author.username}`}>
-                      {comment.author.username}
-                    </Link>
-                    <small className="text-muted">{comment.created_at}</small>
-                  </div>
-                </div>
-                <p className="article-content">{comment.content}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-        </>
-        )}   
+      </article> 
       </div>
     );
   };
@@ -133,6 +111,37 @@ const UserPosts = (props) => {
       console.error('Error fetching data: ', error);
     })
   }
+
+  const handleLike = (postId) => {
+    fetch('blog/like/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({ post_id: postId })
+    })
+    .then(response => response.json())
+    .then(viewUserPosts(username))
+  }
+
+  const handleBookmark = (postId) => {
+    fetch('blog/bookmark/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({post_id: postId})
+    })
+    .then(response => response.json())
+    .then(viewUserPosts(username))
+  }
+
 
   return (
         <main role="main" className="container">

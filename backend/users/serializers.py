@@ -8,6 +8,12 @@ class UserWithoutProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email']
 
+
+class FollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['user']
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserWithoutProfileSerializer()
     following = serializers.SerializerMethodField()
@@ -23,7 +29,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     def get_followers(self, obj):
         followers = obj.user.followers.all()
-        return ProfileSerializer(followers, many=True).data
+        return FollowerSerializer(followers, many=True).data
 
 
 class UserSerializer(serializers.ModelSerializer):

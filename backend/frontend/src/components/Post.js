@@ -48,6 +48,51 @@ const Post = ({ getBlog }) => {
     });
   }
 
+  const handlePostLike = (postId) => {
+    fetch('blog/like/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({ post_id: postId })
+    })
+    .then(response => response.json())
+    .then(getPost(id))
+  }
+
+  const handleCommentLike = (commentId) => {
+    fetch('blog/like/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({ comment_id: commentId })
+    })
+    .then(response => response.json())
+    .then(getPost(id))
+  }
+
+  const handleBookmark = (postId) => {
+    fetch('blog/bookmark/', {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({post_id: postId})
+    })
+    .then(response => response.json())
+    .then(getPost(id))
+  }
+
   //load necessary
   useEffect(() => {
     getUser()
@@ -139,7 +184,6 @@ const Post = ({ getBlog }) => {
     })
   }
 
-  console.log(post.comments)
   return (
     <main role="main" className="container">
       <div className="row">
@@ -176,17 +220,17 @@ const Post = ({ getBlog }) => {
               <div className="col-md-2">
                 <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>
               </div>           
-              <div className="col-md-2">
-                <p>T2</p>
+              <div className="post-click col-md-2" onClick={() => handlePostLike(post.id)}>
+                {post.likes.users.includes(user.username) ? ( 
+                <p><i className="bi bi-heart-fill"/> {post.likes.count}</p>
+                ): <p><i className="bi bi-heart"/>  {post.likes.count}</p>
+                }
               </div>
-              <div className="col-md-2">
-                <p>T3</p>
-              </div>
-              <div className="col-md-2">
-                <p>T4</p>
-              </div>
-              <div className="col-md-2">
-                <p>T5</p>
+              <div className="post-click col-md-2" onClick={() => handleBookmark(post.id)}>
+                {post.bookmarks.includes(user.id) ? ( 
+                  <p><i className="bi bi-bookmark-fill"/></p>
+                ): <p><i className="bi bi-bookmark"/></p>
+                }
               </div>
             </div>
           </article> 
@@ -255,17 +299,11 @@ const Post = ({ getBlog }) => {
                     <i className="bi bi-filter-square-fill pr-4"/> {comment.replies.length}
                     </Link>
                   </div>           
-                  <div className="col-md-2">
-                    <p>T2</p>
-                  </div>
-                  <div className="col-md-2">
-                    <p>T3</p>
-                  </div>
-                  <div className="col-md-2">
-                    <p>T4</p>
-                  </div>
-                  <div className="col-md-2">
-                    <p>T5</p>
+                  <div className="post-click col-md-2" onClick={() => handleCommentLike(comment.id)}>
+                    {comment.likes.users.includes(user.username) ? ( 
+                      <p><i className="bi bi-heart-fill"/> {comment.likes.count}</p>
+                    ): <p><i className="bi bi-heart"/>  {comment.likes.count}</p>
+                    }
                   </div>
                 </div>
               </div>

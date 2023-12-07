@@ -103,6 +103,21 @@ const Comment = () => {
         })
     }
 
+    const handleLike = (commentId) => {
+        fetch('blog/like/', {
+          credentials: 'include',
+          method: 'POST',
+          mode: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({ comment_id: commentId })
+        })
+        .then(response => response.json())
+        .then(getComment())
+    }
+
     //load comment
     useEffect(() => {
         getComment()
@@ -167,8 +182,11 @@ const Comment = () => {
                     <div className="col-md-2">
                         <i className="bi bi-reply create-comment" onClick={() => setIsReplying(true)}></i>
                     </div>           
-                    <div className="col-md-2">
-                        <p>T2</p>
+                    <div className="post-click col-md-2" onClick={() => handleLike(comment.id)}>
+                        {comment.likes.users.includes(user.username) ? ( 
+                        <p><i className="bi bi-heart-fill"/> {comment.likes.count}</p>
+                        ): <p><i className="bi bi-heart"/>  {comment.likes.count}</p>
+                        }
                     </div>
                     <div className="col-md-2">
                         <p>T3</p>
@@ -221,11 +239,14 @@ const Comment = () => {
                 <div className="container text-center row pt-3">
                     <div className="col-md-2">
                         <Link className="post-click" to={`/post/${p_id}/comment/${reply.id}`}>
-                        <i className="bi bi-filter-square-fill pr-4"/> {comment.replies.length}
+                        <i className="bi bi-filter-square-fill pr-4"/> {reply.replies.length}
                         </Link>
                      </div>          
-                    <div className="col-md-2">
-                        <p>T2</p>
+                     <div className="post-click col-md-2" onClick={() => handleLike(reply.id)}>
+                        {reply.likes.users.includes(user.username) ? ( 
+                        <p><i className="bi bi-heart-fill"/> {reply.likes.count}</p>
+                        ): <p><i className="bi bi-heart"/>  {reply.likes.count}</p>
+                        }
                     </div>
                     <div className="col-md-2">
                         <p>T3</p>
